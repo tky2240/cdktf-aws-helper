@@ -5,9 +5,9 @@ import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
 import { VpcEndpoint } from "@cdktf/provider-aws/lib/vpc-endpoint";
 import { App, TerraformStack } from "cdktf";
 import { Port } from "../src/linkage";
-import "../src/resources/linkages/instance";
-import "../src/resources/linkages/kinesisanalyticsv2-application";
-import "../src/resources/linkages/vpc-endpoint";
+import "../src/resources/linkables/instance";
+import "../src/resources/linkables/kinesisanalyticsv2-application";
+import "../src/resources/linkables/vpc-endpoint";
 import "../src/resources/peers/data-aws-ec2-managed-prefix-list";
 
 test("connection test", () => {
