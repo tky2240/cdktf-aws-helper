@@ -18,7 +18,7 @@ TODO: Provide installation instructions here.
 
 ## Usage
 
-Currently, you can see test code in `src/test/linkage.test.ts`.
+Currently, you can see test code in [src/test/linkage.test.ts](src/test/linkage.test.ts).
 
 ## Features
 
