@@ -36,7 +36,7 @@ Instance = function (
     })(),
   });
   instance.vpcSecurityGroupIds = Fn.flatten([
-    instance.vpcSecurityGroupIdsInput,
+    [instance.vpcSecurityGroupIdsInput],
     sg.id,
   ]);
   Object.defineProperty(instance, "linkage", {

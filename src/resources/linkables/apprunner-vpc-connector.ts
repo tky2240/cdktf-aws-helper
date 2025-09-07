@@ -34,7 +34,10 @@ ApprunnerVpcConnector = function (
       id: subnetId,
     }).vpcId,
   });
-  connector.securityGroups = Fn.flatten([connector.securityGroupsInput, sg.id]);
+  connector.securityGroups = Fn.flatten([
+    [connector.securityGroupsInput],
+    sg.id,
+  ]);
   Object.defineProperty(connector, "linkage", {
     value: new Linkage(scope, `${connector.node.id}-Linkage`, {
       peer: sg,
