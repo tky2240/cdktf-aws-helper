@@ -1,6 +1,8 @@
-# Project Name
+# cdktf-aws-helper
 
-A brief description of your project and its purpose.
+A helper library for AWS CDK for Terraform (cdktf) to manage security groups more easily.
+
+This library inspired by [aws-cdk](https://github.com/aws/aws-cdk).
 
 ## Table of Contents
 
