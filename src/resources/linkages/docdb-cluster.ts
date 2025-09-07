@@ -1,0 +1,54 @@
+import { DataAwsDbSubnetGroup } from "@cdktf/provider-aws/lib/data-aws-db-subnet-group";
+import { DataAwsVpc } from "@cdktf/provider-aws/lib/data-aws-vpc";
+import { DocdbCluster } from "@cdktf/provider-aws/lib/docdb-cluster";
+import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
+import { Fn } from "cdktf";
+import { Construct } from "constructs";
+import { ILinkable, Linkage } from "../../linkage";
+
+declare module "@cdktf/provider-aws/lib/docdb-cluster" {
+  interface DocdbCluster extends ILinkable {}
+}
+
+const OriginalDocdbCluster = DocdbCluster;
+
+//@ts-expect-error
+DocdbCluster = function (
+  ...args: [scope: Construct, id: string, config: any]
+): DocdbCluster {
+  const cluster = Reflect.construct(OriginalDocdbCluster, args) as DocdbCluster;
+  const scope = cluster.node.scope;
+  if (!scope) {
+    throw new Error("Document DB Cluster must have a scope");
+  }
+
+  const subnetGroupName = cluster.dbSubnetGroupNameInput;
+  const vpcId = (() => {
+    if (subnetGroupName == null) {
+      return new DataAwsVpc(scope, `${cluster.node.id}-VPCData`, {
+        default: true,
+      }).id;
+    }
+    return new DataAwsDbSubnetGroup(scope, `${cluster.node.id}-SubnetData`, {
+      name: subnetGroupName,
+    }).vpcId;
+  })();
+
+  const sg = new SecurityGroup(scope, `${cluster.node.id}-SG`, {
+    name: `${cluster.node.id}-SG`,
+    description: `Security group for ${cluster.node.id}`,
+    vpcId: vpcId,
+  });
+  cluster.vpcSecurityGroupIds = Fn.flatten([
+    [cluster.vpcSecurityGroupIdsInput],
+    sg.id,
+  ]);
+  Object.defineProperty(cluster, "linkage", {
+    value: new Linkage(scope, `${cluster.node.id}-Linkage`, {
+      peer: sg,
+    }),
+  });
+  return cluster;
+};
+
+Object.setPrototypeOf(DocdbCluster, OriginalDocdbCluster);

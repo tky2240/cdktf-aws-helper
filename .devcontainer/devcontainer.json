@@ -1,0 +1,32 @@
+{
+  "name": "cdktf aws helper devcontainer",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "mounts": [
+    "src=cdktf-aws-helper-devcontainer,target=/home/vscode,type=volume"
+  ],
+  "onCreateCommand": "mise trust -a && mise install",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "editor.formatOnSave": true,
+        "[typescript]": {
+          "editor.formatOnSave": true,
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.codeActionsOnSave": {
+            "source.organizeImports":"explicit",
+            "source.fixAll.eslint": "explicit",
+            "source.addMissingImports.ts": "explicit",
+            "source.sortImports": "explicit",
+            "source.removeUnusedImports": "explicit"
+          }
+        }
+      },
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  }
+}
