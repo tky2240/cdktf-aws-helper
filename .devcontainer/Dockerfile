@@ -6,3 +6,4 @@ RUN curl https://mise.run | MISE_VERSION=$MISE_VERSION MISE_INSTALL_PATH=/usr/lo
 
 USER vscode
 RUN echo 'eval "$(mise activate bash)"' >> ~/.bashrc
+RUN echo 'eval "$(mise completion bash --include-bash-completion-lib)"'  >> ~/.bashrc

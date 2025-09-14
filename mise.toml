@@ -2,3 +2,4 @@
 node = "22"
 "npm:cdktf-cli" = "0.21.0"
 terraform = "1.13.1"
+usage = "2.2.2"
