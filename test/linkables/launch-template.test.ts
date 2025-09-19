@@ -24,7 +24,7 @@ describe("LaunchTemplateTestSuites", () => {
           }
         })(),
       );
-      if (!suite.inputConfig?.vpcSecurityGroupIds == null) {
+      if (suite.inputConfig?.vpcSecurityGroupIds != null) {
         expect(synthed).toHaveResourceWithProperties(SecurityGroup, {
           name: suite.expectedSecurityGroupName,
           vpc_id: suite.expectedVpcIdString,

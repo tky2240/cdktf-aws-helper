@@ -14,7 +14,6 @@ import "./fsx-lustre-file-system";
 import "./fsx-ontap-file-system";
 import "./fsx-openzfs-file-system";
 import "./fsx-windows-file-system";
-import "./index";
 import "./instance";
 import "./kinesis-firehose-delivery-stream";
 import "./kinesisanalyticsv2-application";

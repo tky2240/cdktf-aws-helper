@@ -69,7 +69,7 @@ export const RDS_CLUSTER_TEST_SUITE: TestSuite<typeof RdsCluster> = {
     ]),
     expectedSecurityGroupName: `${constructId}-SG`,
     expectedVpcIdString: createVpcIdString(constructId, "db-subnet-group"),
-    expectedDataAwsSubnet: "db-subnet-group",
+    expectedDataAwsSubnet: "subnet-123456",
     expectedError: false,
   },
 } as const;

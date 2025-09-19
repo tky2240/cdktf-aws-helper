@@ -2,7 +2,7 @@ import { DataAwsDbSubnetGroup } from "@cdktf/provider-aws/lib/data-aws-db-subnet
 import { NeptuneCluster } from "@cdktf/provider-aws/lib/neptune-cluster";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import "cdktf/lib/testing/adapters/jest";
-import "../../src/resources/linkables/msk-cluster";
+import "../../src/resources/linkables/neptune-cluster";
 import { NEPTUNE_CLUSTER_TEST_SUITE } from "../cases/neptune-cluster";
 import { synthTestStack } from "../synth";
 
