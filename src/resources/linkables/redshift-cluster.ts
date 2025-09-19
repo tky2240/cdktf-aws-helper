@@ -32,18 +32,18 @@ RedshiftCluster = function (
         default: true,
       }).id;
     }
-    const subnetId = new DataAwsRedshiftSubnetGroup(
+    const subnetIds = new DataAwsRedshiftSubnetGroup(
       scope,
       `${cluster.node.id}-SubnetGroupData`,
       {
         name: cluster.clusterSubnetGroupNameInput,
       },
-    ).subnetIds?.[0];
-    if (subnetId == null) {
+    ).subnetIds;
+    if (subnetIds == null) {
       throw new Error("Subnet ID must be specified");
     }
     return new DataAwsSubnet(scope, `${cluster.node.id}-SubnetData`, {
-      id: subnetId,
+      id: Fn.element(subnetIds, 0),
     }).vpcId;
   })();
 

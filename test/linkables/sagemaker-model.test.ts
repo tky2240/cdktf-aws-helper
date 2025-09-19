@@ -1,23 +1,24 @@
-import { ApprunnerVpcConnector } from "@cdktf/provider-aws/lib/apprunner-vpc-connector";
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
+import { SagemakerModel } from "@cdktf/provider-aws/lib/sagemaker-model";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import "cdktf/lib/testing/adapters/jest";
-import "../../src/resources/linkables/apprunner-vpc-connector";
-import { APPRUNNER_VPC_CONNECTOR_TEST_SUITE } from "../cases/apprunner-vpc-connector";
+import "../../src/resources/linkables/sagemaker-model";
+import { SAGEMAKER_MODEL_TEST_SUITE } from "../cases/sagemaker-model";
 import { synthTestStack } from "../synth";
 
-describe("ApprunnerTestSuites", () => {
-  for (const [name, suite] of Object.entries(
-    APPRUNNER_VPC_CONNECTOR_TEST_SUITE,
-  )) {
+describe("SagemakerModelTestSuites", () => {
+  for (const [name, suite] of Object.entries(SAGEMAKER_MODEL_TEST_SUITE)) {
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
       });
-      expect(synthed).toHaveResourceWithProperties(ApprunnerVpcConnector, {
-        vpc_connector_name: suite.inputConfig.vpcConnectorName,
-        subnets: suite.inputConfig.subnets,
-        security_groups: suite.expectedSecurityGroupIdsString,
+      expect(synthed).toHaveResourceWithProperties(SagemakerModel, {
+        name: suite.inputConfig.name,
+        execution_role_arn: suite.inputConfig.executionRoleArn,
+        vpc_config: {
+          subnets: suite.inputConfig.vpcConfig?.subnets,
+          security_group_ids: suite.expectedSecurityGroupIdsString,
+        },
       });
       expect(synthed).toHaveResourceWithProperties(SecurityGroup, {
         name: suite.expectedSecurityGroupName,

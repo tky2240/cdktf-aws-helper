@@ -1,23 +1,22 @@
-import { ApprunnerVpcConnector } from "@cdktf/provider-aws/lib/apprunner-vpc-connector";
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
+import { Instance } from "@cdktf/provider-aws/lib/instance";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import "cdktf/lib/testing/adapters/jest";
-import "../../src/resources/linkables/apprunner-vpc-connector";
-import { APPRUNNER_VPC_CONNECTOR_TEST_SUITE } from "../cases/apprunner-vpc-connector";
+import "../../src/resources/linkables/instance";
+import { INSTANCE_TEST_SUITE } from "../cases/instance";
 import { synthTestStack } from "../synth";
 
-describe("ApprunnerTestSuites", () => {
-  for (const [name, suite] of Object.entries(
-    APPRUNNER_VPC_CONNECTOR_TEST_SUITE,
-  )) {
+describe("InstanceTestSuites", () => {
+  for (const [name, suite] of Object.entries(INSTANCE_TEST_SUITE)) {
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
       });
-      expect(synthed).toHaveResourceWithProperties(ApprunnerVpcConnector, {
-        vpc_connector_name: suite.inputConfig.vpcConnectorName,
-        subnets: suite.inputConfig.subnets,
-        security_groups: suite.expectedSecurityGroupIdsString,
+      expect(synthed).toHaveResourceWithProperties(Instance, {
+        ami: suite.inputConfig?.ami,
+        instance_type: suite.inputConfig?.instanceType,
+        subnet_id: suite.inputConfig?.subnetId,
+        vpc_security_group_ids: suite.expectedSecurityGroupIdsString,
       });
       expect(synthed).toHaveResourceWithProperties(SecurityGroup, {
         name: suite.expectedSecurityGroupName,

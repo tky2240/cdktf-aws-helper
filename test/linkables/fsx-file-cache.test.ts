@@ -1,23 +1,23 @@
-import { ApprunnerVpcConnector } from "@cdktf/provider-aws/lib/apprunner-vpc-connector";
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
+import { FsxFileCache } from "@cdktf/provider-aws/lib/fsx-file-cache";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import "cdktf/lib/testing/adapters/jest";
-import "../../src/resources/linkables/apprunner-vpc-connector";
-import { APPRUNNER_VPC_CONNECTOR_TEST_SUITE } from "../cases/apprunner-vpc-connector";
+import "../../src/resources/linkables/fsx-file-cache";
+import { FSX_FILE_CACHE_TEST_SUITE } from "../cases/fsx-file-cache";
 import { synthTestStack } from "../synth";
 
-describe("ApprunnerTestSuites", () => {
-  for (const [name, suite] of Object.entries(
-    APPRUNNER_VPC_CONNECTOR_TEST_SUITE,
-  )) {
+describe("FsxFileCacheTestSuites", () => {
+  for (const [name, suite] of Object.entries(FSX_FILE_CACHE_TEST_SUITE)) {
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
       });
-      expect(synthed).toHaveResourceWithProperties(ApprunnerVpcConnector, {
-        vpc_connector_name: suite.inputConfig.vpcConnectorName,
-        subnets: suite.inputConfig.subnets,
-        security_groups: suite.expectedSecurityGroupIdsString,
+      expect(synthed).toHaveResourceWithProperties(FsxFileCache, {
+        file_cache_type: suite.inputConfig.fileCacheType,
+        file_cache_type_version: suite.inputConfig.fileCacheTypeVersion,
+        storage_capacity: suite.inputConfig.storageCapacity,
+        subnet_ids: suite.inputConfig.subnetIds,
+        security_group_ids: suite.expectedSecurityGroupIdsString,
       });
       expect(synthed).toHaveResourceWithProperties(SecurityGroup, {
         name: suite.expectedSecurityGroupName,

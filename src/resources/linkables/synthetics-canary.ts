@@ -33,7 +33,7 @@ SyntheticsCanary = function (
       return canary._linkage;
     },
   });
-  if (canary.vpcConfigInput == null) {
+  if (canary.vpcConfigInput != null) {
     const subnetId = canary.vpcConfig.subnetIdsInput?.[0];
     if (subnetId == null) {
       throw new Error("Subnet ID must be specified");
@@ -50,7 +50,7 @@ SyntheticsCanary = function (
       [canary.vpcConfig.securityGroupIdsInput],
       sg.id,
     ]);
-    Object.defineProperty(canary, "linkage", {
+    Object.defineProperty(canary, "_linkage", {
       value: new Linkage(scope, `${canary.node.id}-Linkage`, {
         peer: sg,
       }),

@@ -45,7 +45,10 @@ SagemakerModel = function (
     description: `Security group for ${model.node.id}`,
     vpcId: vpcId,
   });
-  model.vpcConfig.subnets = Fn.flatten([[model.vpcConfig.subnetsInput], sg.id]);
+  model.vpcConfig.securityGroupIds = Fn.flatten([
+    [model.vpcConfig.securityGroupIdsInput],
+    sg.id,
+  ]);
   Object.defineProperty(model, "linkage", {
     value: new Linkage(scope, `${model.node.id}-Linkage`, {
       peer: sg,
