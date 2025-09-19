@@ -106,6 +106,10 @@ interface ILinkageRule {
   readonly peer: IPeer;
 }
 
+export function uniqueIdFrom(linkableRule: ILinkageRule): string {
+  return `${linkableRule.direction}:${linkableRule.protocol}:${linkableRule.fromPort.port}-${linkableRule.toPort.port}:${linkableRule.peer.uniqueId}`;
+}
+
 function isILinkageRule(x: unknown): x is ILinkageRule {
   if (x == null || typeof x !== "object") {
     return false;
@@ -225,7 +229,7 @@ export class Linkage extends Construct implements ILinkage {
     if (rule.direction === "in") {
       new VpcSecurityGroupIngressRule(
         this,
-        `IngressRule${rule.protocol}${rule.fromPort.port}to${rule.toPort.port}From${rule.peer.uniqueId}`,
+        `IngressRule:${uniqueIdFrom(rule)}`,
         {
           fromPort: rule.fromPort.port,
           toPort: rule.toPort.port,
@@ -255,37 +259,33 @@ export class Linkage extends Construct implements ILinkage {
         },
       );
     } else if (rule.direction === "out") {
-      new VpcSecurityGroupEgressRule(
-        this,
-        `EgressRule${rule.protocol}${rule.fromPort.port}to${rule.toPort.port}To${rule.peer.uniqueId}`,
-        {
-          fromPort: rule.fromPort.port,
-          toPort: rule.toPort.port,
-          ipProtocol: rule.protocol,
-          securityGroupId: this.securityGroup.peerId,
-          ...(() => {
-            if (isIpv4(rule.peer)) {
-              return { cidrIpv4: rule.peer.peerId };
-            } else if (isIpv6(rule.peer)) {
-              return { cidrIpv6: rule.peer.peerId };
-            } else if (isEc2ManagedPrefixList(rule.peer)) {
-              return { prefixListId: rule.peer.peerId };
-            } else if (isDataAwsEc2ManagedPrefixList(rule.peer)) {
-              return { prefixListId: rule.peer.peerId };
-            } else if (isSecurityGroup(rule.peer)) {
-              return { destinationSecurityGroupId: rule.peer.peerId };
-            } else if (isDataAwsSecurityGroup(rule.peer)) {
-              return { referencedSecurityGroupId: rule.peer.peerId };
-            } else if (Linkage.isLinkage(rule.peer)) {
-              return {
-                referencedSecurityGroupId: rule.peer.securityGroup.peerId,
-              };
-            } else {
-              throw new Error(`Unsupported peer type: ${rule.peer.peerId}`);
-            }
-          })(),
-        },
-      );
+      new VpcSecurityGroupEgressRule(this, `EgressRule:${uniqueIdFrom(rule)}`, {
+        fromPort: rule.fromPort.port,
+        toPort: rule.toPort.port,
+        ipProtocol: rule.protocol,
+        securityGroupId: this.securityGroup.peerId,
+        ...(() => {
+          if (isIpv4(rule.peer)) {
+            return { cidrIpv4: rule.peer.peerId };
+          } else if (isIpv6(rule.peer)) {
+            return { cidrIpv6: rule.peer.peerId };
+          } else if (isEc2ManagedPrefixList(rule.peer)) {
+            return { prefixListId: rule.peer.peerId };
+          } else if (isDataAwsEc2ManagedPrefixList(rule.peer)) {
+            return { prefixListId: rule.peer.peerId };
+          } else if (isSecurityGroup(rule.peer)) {
+            return { destinationSecurityGroupId: rule.peer.peerId };
+          } else if (isDataAwsSecurityGroup(rule.peer)) {
+            return { referencedSecurityGroupId: rule.peer.peerId };
+          } else if (Linkage.isLinkage(rule.peer)) {
+            return {
+              referencedSecurityGroupId: rule.peer.securityGroup.peerId,
+            };
+          } else {
+            throw new Error(`Unsupported peer type: ${rule.peer.peerId}`);
+          }
+        })(),
+      });
     } else {
       throw new Error(`Invalid direction: ${rule.direction satisfies never}`);
     }
