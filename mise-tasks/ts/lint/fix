@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+#MISE description="Run eslint --fix"
+#MISE dir="{{ config_root }}"
+
+set -euo pipefail
+npm run fix

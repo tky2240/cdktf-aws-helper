@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+#MISE description="Run ci tasks"
+#MISE dir="{{ config_root }}"
+
+set -euo pipefail
+
+mise run ts:format:check
+mise run ts:lint
