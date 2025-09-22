@@ -1,4 +1,7 @@
-import { CodebuildProject } from "@cdktf/provider-aws/lib/codebuild-project";
+import {
+  CodebuildProject,
+  CodebuildProjectConfig,
+} from "@cdktf/provider-aws/lib/codebuild-project";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -12,12 +15,9 @@ const OriginalCodebuildProject = CodebuildProject;
 
 //@ts-expect-error override constructor
 CodebuildProject = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: CodebuildProjectConfig]
 ): CodebuildProject {
-  const codebuild = Reflect.construct(
-    OriginalCodebuildProject,
-    args,
-  ) as CodebuildProject;
+  const codebuild = Reflect.construct(OriginalCodebuildProject, args);
   const scope = codebuild.node.scope;
   if (!scope) {
     throw new Error("Codebuild Project must have a scope");

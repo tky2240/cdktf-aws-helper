@@ -1,4 +1,7 @@
-import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
+import {
+  SecurityGroup,
+  SecurityGroupConfig,
+} from "@cdktf/provider-aws/lib/security-group";
 import { Construct } from "constructs";
 import { IPeer } from "../../linkage";
 
@@ -12,12 +15,9 @@ const OriginalSecurityGroup = SecurityGroup;
 
 //@ts-expect-error override constructor
 SecurityGroup = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: SecurityGroupConfig]
 ): SecurityGroup {
-  const securityGroup = Reflect.construct(
-    OriginalSecurityGroup,
-    args,
-  ) as SecurityGroup;
+  const securityGroup = Reflect.construct(OriginalSecurityGroup, args);
   const scope = securityGroup.node.scope;
   if (!scope) {
     throw new Error("SecurityGroup must have a scope");

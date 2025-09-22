@@ -1,5 +1,8 @@
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
-import { EcsService } from "@cdktf/provider-aws/lib/ecs-service";
+import {
+  EcsService,
+  EcsServiceConfig,
+} from "@cdktf/provider-aws/lib/ecs-service";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -12,9 +15,9 @@ declare module "@cdktf/provider-aws/lib/ecs-service" {
 const OriginalEcsService = EcsService;
 //@ts-expect-error override constructor
 EcsService = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: EcsServiceConfig]
 ): EcsService {
-  const ecsService = Reflect.construct(OriginalEcsService, args) as EcsService;
+  const ecsService = Reflect.construct(OriginalEcsService, args);
   const scope = ecsService.node.scope;
   if (!scope) {
     throw new Error("ECS Service must have a scope");

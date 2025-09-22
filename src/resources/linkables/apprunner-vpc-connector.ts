@@ -1,4 +1,7 @@
-import { ApprunnerVpcConnector } from "@cdktf/provider-aws/lib/apprunner-vpc-connector";
+import {
+  ApprunnerVpcConnector,
+  ApprunnerVpcConnectorConfig,
+} from "@cdktf/provider-aws/lib/apprunner-vpc-connector";
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
@@ -13,12 +16,9 @@ const OriginalApprunnerVpcConnector = ApprunnerVpcConnector;
 
 //@ts-expect-error override constructor
 ApprunnerVpcConnector = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: ApprunnerVpcConnectorConfig]
 ): ApprunnerVpcConnector {
-  const connector = Reflect.construct(
-    OriginalApprunnerVpcConnector,
-    args,
-  ) as ApprunnerVpcConnector;
+  const connector = Reflect.construct(OriginalApprunnerVpcConnector, args);
   const scope = connector.node.scope;
   if (!scope) {
     throw new Error("Apprunner VPC Connector must have a scope");

@@ -1,6 +1,9 @@
 import { DataAwsDbSubnetGroup } from "@cdktf/provider-aws/lib/data-aws-db-subnet-group";
 import { DataAwsVpc } from "@cdktf/provider-aws/lib/data-aws-vpc";
-import { DbInstance } from "@cdktf/provider-aws/lib/db-instance";
+import {
+  DbInstance,
+  DbInstanceConfig,
+} from "@cdktf/provider-aws/lib/db-instance";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -14,9 +17,9 @@ const OriginalDbInstance = DbInstance;
 
 //@ts-expect-error override constructor
 DbInstance = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: DbInstanceConfig]
 ): DbInstance {
-  const instance = Reflect.construct(OriginalDbInstance, args) as DbInstance;
+  const instance = Reflect.construct(OriginalDbInstance, args);
   const scope = instance.node.scope;
   if (!scope) {
     throw new Error("DB Instance must have a scope");

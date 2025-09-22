@@ -1,5 +1,5 @@
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
-import { Lb } from "@cdktf/provider-aws/lib/lb";
+import { Lb, LbConfig } from "@cdktf/provider-aws/lib/lb";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn, Token } from "cdktf";
 import { Construct } from "constructs";
@@ -12,8 +12,8 @@ declare module "@cdktf/provider-aws/lib/lb" {
 const OriginalLb = Lb;
 
 //@ts-expect-error override constructor
-Lb = function (...args: [scope: Construct, id: string, config: any]): Lb {
-  const lb = Reflect.construct(OriginalLb, args) as Lb;
+Lb = function (...args: [scope: Construct, id: string, config: LbConfig]): Lb {
+  const lb = Reflect.construct(OriginalLb, args);
   const scope = lb.node.scope;
   if (!scope) {
     throw new Error("LB must have a scope");

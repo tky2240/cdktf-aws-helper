@@ -1,5 +1,8 @@
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
-import { LambdaFunction } from "@cdktf/provider-aws/lib/lambda-function";
+import {
+  LambdaFunction,
+  LambdaFunctionConfig,
+} from "@cdktf/provider-aws/lib/lambda-function";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -13,12 +16,9 @@ const OriginalLambdaFunction = LambdaFunction;
 
 //@ts-expect-error override constructor
 LambdaFunction = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: LambdaFunctionConfig]
 ): LambdaFunction {
-  const lambda = Reflect.construct(
-    OriginalLambdaFunction,
-    args,
-  ) as LambdaFunction;
+  const lambda = Reflect.construct(OriginalLambdaFunction, args);
   const scope = lambda.node.scope;
   if (!scope) {
     throw new Error("Lambda Function must have a scope");

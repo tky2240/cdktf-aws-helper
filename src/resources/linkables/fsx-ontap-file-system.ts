@@ -1,5 +1,8 @@
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
-import { FsxOntapFileSystem } from "@cdktf/provider-aws/lib/fsx-ontap-file-system";
+import {
+  FsxOntapFileSystem,
+  FsxOntapFileSystemConfig,
+} from "@cdktf/provider-aws/lib/fsx-ontap-file-system";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -13,12 +16,9 @@ const OriginalFsxOntapFileSystem = FsxOntapFileSystem;
 
 //@ts-expect-error override constructor
 FsxOntapFileSystem = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: FsxOntapFileSystemConfig]
 ): FsxOntapFileSystem {
-  const fsx = Reflect.construct(
-    OriginalFsxOntapFileSystem,
-    args,
-  ) as FsxOntapFileSystem;
+  const fsx = Reflect.construct(OriginalFsxOntapFileSystem, args);
   const scope = fsx.node.scope;
   if (!scope) {
     throw new Error("FSx OntapFileSystem must have a scope");

@@ -1,5 +1,8 @@
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
-import { FsxWindowsFileSystem } from "@cdktf/provider-aws/lib/fsx-windows-file-system";
+import {
+  FsxWindowsFileSystem,
+  FsxWindowsFileSystemConfig,
+} from "@cdktf/provider-aws/lib/fsx-windows-file-system";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -13,12 +16,9 @@ const OriginalFsxWindowsFileSystem = FsxWindowsFileSystem;
 
 //@ts-expect-error override constructor
 FsxWindowsFileSystem = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: FsxWindowsFileSystemConfig]
 ): FsxWindowsFileSystem {
-  const fsx = Reflect.construct(
-    OriginalFsxWindowsFileSystem,
-    args,
-  ) as FsxWindowsFileSystem;
+  const fsx = Reflect.construct(OriginalFsxWindowsFileSystem, args);
   const scope = fsx.node.scope;
   if (!scope) {
     throw new Error("FSx WindowsFileSystem must have a scope");

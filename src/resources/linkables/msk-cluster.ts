@@ -1,5 +1,8 @@
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
-import { MskCluster } from "@cdktf/provider-aws/lib/msk-cluster";
+import {
+  MskCluster,
+  MskClusterConfig,
+} from "@cdktf/provider-aws/lib/msk-cluster";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -13,9 +16,9 @@ const OriginalMskCluster = MskCluster;
 
 //@ts-expect-error override constructor
 MskCluster = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: MskClusterConfig]
 ): MskCluster {
-  const cluster = Reflect.construct(OriginalMskCluster, args) as MskCluster;
+  const cluster = Reflect.construct(OriginalMskCluster, args);
   const scope = cluster.node.scope;
   if (!scope) {
     throw new Error("MSK Cluster must have a scope");

@@ -1,5 +1,8 @@
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
-import { FsxLustreFileSystem } from "@cdktf/provider-aws/lib/fsx-lustre-file-system";
+import {
+  FsxLustreFileSystem,
+  FsxLustreFileSystemConfig,
+} from "@cdktf/provider-aws/lib/fsx-lustre-file-system";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -13,12 +16,9 @@ const OriginalFsxLustreFileSystem = FsxLustreFileSystem;
 
 //@ts-expect-error override constructor
 FsxLustreFileSystem = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: FsxLustreFileSystemConfig]
 ): FsxLustreFileSystem {
-  const fsx = Reflect.construct(
-    OriginalFsxLustreFileSystem,
-    args,
-  ) as FsxLustreFileSystem;
+  const fsx = Reflect.construct(OriginalFsxLustreFileSystem, args);
   const scope = fsx.node.scope;
   if (!scope) {
     throw new Error("FSx LustreFileSystem must have a scope");

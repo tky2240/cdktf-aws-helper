@@ -1,7 +1,10 @@
 import { DataAwsRedshiftSubnetGroup } from "@cdktf/provider-aws/lib/data-aws-redshift-subnet-group";
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
 import { DataAwsVpc } from "@cdktf/provider-aws/lib/data-aws-vpc";
-import { RedshiftCluster } from "@cdktf/provider-aws/lib/redshift-cluster";
+import {
+  RedshiftCluster,
+  RedshiftClusterConfig,
+} from "@cdktf/provider-aws/lib/redshift-cluster";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -15,12 +18,9 @@ const OriginalRedshiftCluster = RedshiftCluster;
 
 //@ts-expect-error override constructor
 RedshiftCluster = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: RedshiftClusterConfig]
 ): RedshiftCluster {
-  const cluster = Reflect.construct(
-    OriginalRedshiftCluster,
-    args,
-  ) as RedshiftCluster;
+  const cluster = Reflect.construct(OriginalRedshiftCluster, args);
   const scope = cluster.node.scope;
   if (!scope) {
     throw new Error("Redshift Cluster must have a scope");

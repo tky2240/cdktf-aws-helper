@@ -1,6 +1,9 @@
 import { DataAwsDbSubnetGroup } from "@cdktf/provider-aws/lib/data-aws-db-subnet-group";
 import { DataAwsVpc } from "@cdktf/provider-aws/lib/data-aws-vpc";
-import { NeptuneCluster } from "@cdktf/provider-aws/lib/neptune-cluster";
+import {
+  NeptuneCluster,
+  NeptuneClusterConfig,
+} from "@cdktf/provider-aws/lib/neptune-cluster";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -14,12 +17,9 @@ const OriginalNeptuneCluster = NeptuneCluster;
 
 //@ts-expect-error override constructor
 NeptuneCluster = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: NeptuneClusterConfig]
 ): NeptuneCluster {
-  const cluster = Reflect.construct(
-    OriginalNeptuneCluster,
-    args,
-  ) as NeptuneCluster;
+  const cluster = Reflect.construct(OriginalNeptuneCluster, args);
   const scope = cluster.node.scope;
   if (!scope) {
     throw new Error("Neptune Cluster must have a scope");

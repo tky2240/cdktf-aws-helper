@@ -1,5 +1,8 @@
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
-import { VpcEndpoint } from "@cdktf/provider-aws/lib/vpc-endpoint";
+import {
+  VpcEndpoint,
+  VpcEndpointConfig,
+} from "@cdktf/provider-aws/lib/vpc-endpoint";
 import { Fn, Token } from "cdktf";
 import { Construct } from "constructs";
 import { ILinkable, Linkage } from "../../linkage";
@@ -12,9 +15,9 @@ const OriginalVpcEndpoint = VpcEndpoint;
 
 //@ts-expect-error override constructor
 VpcEndpoint = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: VpcEndpointConfig]
 ): VpcEndpoint {
-  const endpoint = Reflect.construct(OriginalVpcEndpoint, args) as VpcEndpoint;
+  const endpoint = Reflect.construct(OriginalVpcEndpoint, args);
   const scope = endpoint.node.scope;
   if (!scope) {
     throw new Error("VPC Endpoint must have a scope");

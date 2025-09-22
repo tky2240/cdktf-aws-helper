@@ -1,5 +1,8 @@
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
-import { Kinesisanalyticsv2Application } from "@cdktf/provider-aws/lib/kinesisanalyticsv2-application";
+import {
+  Kinesisanalyticsv2Application,
+  Kinesisanalyticsv2ApplicationConfig,
+} from "@cdktf/provider-aws/lib/kinesisanalyticsv2-application";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -13,12 +16,16 @@ const OriginalKinesisanalyticsv2Application = Kinesisanalyticsv2Application;
 
 //@ts-expect-error override constructor
 Kinesisanalyticsv2Application = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [
+    scope: Construct,
+    id: string,
+    config: Kinesisanalyticsv2ApplicationConfig,
+  ]
 ): Kinesisanalyticsv2Application {
   const application = Reflect.construct(
     OriginalKinesisanalyticsv2Application,
     args,
-  ) as Kinesisanalyticsv2Application;
+  );
   const scope = application.node.scope;
   if (!scope) {
     throw new Error("Kinesis Analytics V2 Application must have a scope");

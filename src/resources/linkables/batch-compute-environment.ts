@@ -1,4 +1,7 @@
-import { BatchComputeEnvironment } from "@cdktf/provider-aws/lib/batch-compute-environment";
+import {
+  BatchComputeEnvironment,
+  BatchComputeEnvironmentConfig,
+} from "@cdktf/provider-aws/lib/batch-compute-environment";
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
@@ -13,12 +16,9 @@ const OriginalBatchComputeEnvironment = BatchComputeEnvironment;
 
 //@ts-expect-error override constructor
 BatchComputeEnvironment = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: BatchComputeEnvironmentConfig]
 ): BatchComputeEnvironment {
-  const batch = Reflect.construct(
-    OriginalBatchComputeEnvironment,
-    args,
-  ) as BatchComputeEnvironment;
+  const batch = Reflect.construct(OriginalBatchComputeEnvironment, args);
   const scope = batch.node.scope;
   if (!scope) {
     throw new Error("Batch Compute Environment must have a scope");

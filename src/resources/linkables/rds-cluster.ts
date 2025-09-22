@@ -1,6 +1,9 @@
 import { DataAwsDbSubnetGroup } from "@cdktf/provider-aws/lib/data-aws-db-subnet-group";
 import { DataAwsVpc } from "@cdktf/provider-aws/lib/data-aws-vpc";
-import { RdsCluster } from "@cdktf/provider-aws/lib/rds-cluster";
+import {
+  RdsCluster,
+  RdsClusterConfig,
+} from "@cdktf/provider-aws/lib/rds-cluster";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -14,9 +17,9 @@ const OriginalRdsCluster = RdsCluster;
 
 //@ts-expect-error override constructor
 RdsCluster = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: RdsClusterConfig]
 ): RdsCluster {
-  const cluster = Reflect.construct(OriginalRdsCluster, args) as RdsCluster;
+  const cluster = Reflect.construct(OriginalRdsCluster, args);
   const scope = cluster.node.scope;
   if (!scope) {
     throw new Error("RDS Cluster must have a scope");

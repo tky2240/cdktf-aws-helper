@@ -1,6 +1,9 @@
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
-import { SyntheticsCanary } from "@cdktf/provider-aws/lib/synthetics-canary";
+import {
+  SyntheticsCanary,
+  SyntheticsCanaryConfig,
+} from "@cdktf/provider-aws/lib/synthetics-canary";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
 import { ILinkable, Linkage } from "../../linkage";
@@ -13,12 +16,9 @@ const OriginalSyntheticsCanary = SyntheticsCanary;
 
 //@ts-expect-error override constructor
 SyntheticsCanary = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: SyntheticsCanaryConfig]
 ): SyntheticsCanary {
-  const canary = Reflect.construct(
-    OriginalSyntheticsCanary,
-    args,
-  ) as SyntheticsCanary;
+  const canary = Reflect.construct(OriginalSyntheticsCanary, args);
   const scope = canary.node.scope;
   if (!scope) {
     throw new Error("Synthetics Canary must have a scope");

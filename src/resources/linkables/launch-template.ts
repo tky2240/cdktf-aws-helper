@@ -1,5 +1,8 @@
 import { DataAwsSecurityGroup } from "@cdktf/provider-aws/lib/data-aws-security-group";
-import { LaunchTemplate } from "@cdktf/provider-aws/lib/launch-template";
+import {
+  LaunchTemplate,
+  LaunchTemplateConfig,
+} from "@cdktf/provider-aws/lib/launch-template";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -13,12 +16,9 @@ const OriginalLaunchTemplate = LaunchTemplate;
 
 //@ts-expect-error override constructor
 LaunchTemplate = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: LaunchTemplateConfig]
 ): LaunchTemplate {
-  const template = Reflect.construct(
-    OriginalLaunchTemplate,
-    args,
-  ) as LaunchTemplate;
+  const template = Reflect.construct(OriginalLaunchTemplate, args);
   const scope = template.node.scope;
   if (!scope) {
     throw new Error("Launch Template must have a scope");
