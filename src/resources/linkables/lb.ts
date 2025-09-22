@@ -20,13 +20,13 @@ Lb = function (...args: [scope: Construct, id: string, config: any]): Lb {
   }
   Object.defineProperty(lb, "linkage", {
     get() {
-      //@ts-expect-error
+      //@ts-expect-error check lb type
       if (lb._linkage == null) {
         throw new Error(
           "Only Application and Network Load Balancer has linkage",
         );
       }
-      //@ts-expect-error
+      //@ts-expect-error return private field
       return lb._linkage;
     },
   });

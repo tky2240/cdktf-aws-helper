@@ -25,13 +25,13 @@ LaunchTemplate = function (
   }
   Object.defineProperty(template, "linkage", {
     get() {
-      //@ts-expect-error
+      //@ts-expect-error check another security group
       if (template._linkage == null) {
         throw new Error(
           "This Launch Template is not initialized with another security group",
         );
       }
-      //@ts-expect-error
+      //@ts-expect-error return private field
       return template._linkage;
     },
   });

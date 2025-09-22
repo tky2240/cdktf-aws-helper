@@ -25,11 +25,11 @@ Kinesisanalyticsv2Application = function (
   }
   Object.defineProperty(application, "linkage", {
     get() {
-      //@ts-expect-error
+      //@ts-expect-error check vpc association
       if (application._linkage == null) {
         throw new Error("This Application is not associated with a VPC");
       }
-      //@ts-expect-error
+      //@ts-expect-error return private field
       return application._linkage;
     },
   });

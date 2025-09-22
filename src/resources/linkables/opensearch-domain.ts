@@ -25,11 +25,11 @@ OpensearchDomain = function (
   }
   Object.defineProperty(domain, "linkage", {
     get() {
-      //@ts-expect-error
+      //@ts-expect-error check vpc association
       if (domain._linkage == null) {
         throw new Error("Only VPC associated Opensearch Domain has linkage");
       }
-      //@ts-expect-error
+      //@ts-expect-error return private field
       return domain._linkage;
     },
   });

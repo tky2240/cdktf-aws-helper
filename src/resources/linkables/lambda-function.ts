@@ -25,11 +25,11 @@ LambdaFunction = function (
   }
   Object.defineProperty(lambda, "linkage", {
     get() {
-      //@ts-expect-error
+      //@ts-expect-error check vpc association
       if (lambda._linkage == null) {
         throw new Error("This Lambda Function is not associated with a VPC");
       }
-      //@ts-expect-error
+      //@ts-expect-error return private field
       return lambda._linkage;
     },
   });

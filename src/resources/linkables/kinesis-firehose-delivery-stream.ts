@@ -25,11 +25,11 @@ KinesisFirehoseDeliveryStream = function (
   }
   Object.defineProperty(stream, "linkage", {
     get() {
-      //@ts-expect-error
+      //@ts-expect-error check vpc association
       if (stream._linkage == null) {
         throw new Error("This Stream is not associated with a VPC");
       }
-      //@ts-expect-error
+      //@ts-expect-error return private field
       return stream._linkage;
     },
   });

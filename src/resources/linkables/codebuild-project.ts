@@ -24,11 +24,11 @@ CodebuildProject = function (
   }
   Object.defineProperty(codebuild, "linkage", {
     get() {
-      //@ts-expect-error
+      //@ts-expect-error check vpc association
       if (codebuild._linkage == null) {
         throw new Error("This Codebuild Project is not associated with a VPC");
       }
-      //@ts-expect-error
+      //@ts-expect-error return private field
       return codebuild._linkage;
     },
   });

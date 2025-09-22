@@ -21,11 +21,11 @@ EcsTaskSet = function (
   }
   Object.defineProperty(ecsTaskSet, "linkage", {
     get() {
-      //@ts-expect-error
+      //@ts-expect-error check vpc association
       if (ecsTaskSet._linkage == null) {
         throw new Error("This ECS Task Set is not associated with a VPC");
       }
-      //@ts-expect-error
+      //@ts-expect-error return private field
       return ecsTaskSet._linkage;
     },
   });

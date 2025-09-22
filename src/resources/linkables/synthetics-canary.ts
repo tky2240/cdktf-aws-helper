@@ -25,11 +25,11 @@ SyntheticsCanary = function (
   }
   Object.defineProperty(canary, "linkage", {
     get() {
-      //@ts-expect-error
+      //@ts-expect-error check vpc association
       if (canary._linkage == null) {
         throw new Error("This Synthetics Canary is not associated with a VPC");
       }
-      //@ts-expect-error
+      //@ts-expect-error return private field
       return canary._linkage;
     },
   });

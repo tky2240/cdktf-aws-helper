@@ -21,11 +21,11 @@ EcsService = function (
   }
   Object.defineProperty(ecsService, "linkage", {
     get() {
-      //@ts-expect-error
+      //@ts-expect-error check vpc association
       if (ecsService._linkage == null) {
         throw new Error("This ECS Service is not associated with a VPC");
       }
-      //@ts-expect-error
+      //@ts-expect-error return private field
       return ecsService._linkage;
     },
   });

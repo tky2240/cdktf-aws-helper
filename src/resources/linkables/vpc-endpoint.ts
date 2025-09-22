@@ -21,11 +21,11 @@ VpcEndpoint = function (
   }
   Object.defineProperty(endpoint, "linkage", {
     get() {
-      //@ts-expect-error
+      //@ts-expect-error check vpc endpoint type
       if (endpoint._linkage == null) {
         throw new Error("Only Interface VPC Endpoint has linkage");
       }
-      //@ts-expect-error
+      //@ts-expect-error return private field
       return endpoint._linkage;
     },
   });
