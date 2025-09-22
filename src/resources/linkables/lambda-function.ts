@@ -11,7 +11,7 @@ declare module "@cdktf/provider-aws/lib/lambda-function" {
 
 const OriginalLambdaFunction = LambdaFunction;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 LambdaFunction = function (
   ...args: [scope: Construct, id: string, config: any]
 ): LambdaFunction {

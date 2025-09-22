@@ -10,7 +10,7 @@ declare module "@cdktf/provider-aws/lib/ecs-service" {
 }
 
 const OriginalEcsService = EcsService;
-//@ts-expect-error
+//@ts-expect-error override constructor
 EcsService = function (
   ...args: [scope: Construct, id: string, config: any]
 ): EcsService {

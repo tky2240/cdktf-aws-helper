@@ -11,7 +11,7 @@ declare module "@cdktf/provider-aws/lib/fsx-file-cache" {
 
 const OriginalFsxFileCache = FsxFileCache;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 FsxFileCache = function (
   ...args: [scope: Construct, id: string, config: any]
 ): FsxFileCache {

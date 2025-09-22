@@ -12,7 +12,7 @@ declare module "@cdktf/provider-aws/lib/data-aws-ec2-managed-prefix-list" {
 
 const OriginalDataAwsEc2ManagedPrefixList = DataAwsEc2ManagedPrefixList;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 DataAwsEc2ManagedPrefixList = function (
   ...args: [scope: Construct, id: string, config: any]
 ): DataAwsEc2ManagedPrefixList {

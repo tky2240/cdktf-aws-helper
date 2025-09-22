@@ -12,7 +12,7 @@ declare module "@cdktf/provider-aws/lib/rds-cluster" {
 
 const OriginalRdsCluster = RdsCluster;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 RdsCluster = function (
   ...args: [scope: Construct, id: string, config: any]
 ): RdsCluster {

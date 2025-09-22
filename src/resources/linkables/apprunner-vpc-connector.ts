@@ -11,7 +11,7 @@ declare module "@cdktf/provider-aws/lib/apprunner-vpc-connector" {
 
 const OriginalApprunnerVpcConnector = ApprunnerVpcConnector;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 ApprunnerVpcConnector = function (
   ...args: [scope: Construct, id: string, config: any]
 ): ApprunnerVpcConnector {

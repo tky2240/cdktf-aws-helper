@@ -11,7 +11,7 @@ declare module "@cdktf/provider-aws/lib/eks-cluster" {
 
 const OriginalEksCluster = EksCluster;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 EksCluster = function (
   ...args: [scope: Construct, id: string, config: any]
 ): EksCluster {

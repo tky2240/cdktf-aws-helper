@@ -11,7 +11,7 @@ declare module "@cdktf/provider-aws/lib/fsx-ontap-file-system" {
 
 const OriginalFsxOntapFileSystem = FsxOntapFileSystem;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 FsxOntapFileSystem = function (
   ...args: [scope: Construct, id: string, config: any]
 ): FsxOntapFileSystem {

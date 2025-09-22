@@ -11,7 +11,7 @@ declare module "@cdktf/provider-aws/lib/msk-cluster" {
 
 const OriginalMskCluster = MskCluster;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 MskCluster = function (
   ...args: [scope: Construct, id: string, config: any]
 ): MskCluster {

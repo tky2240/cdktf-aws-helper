@@ -10,7 +10,7 @@ declare module "@cdktf/provider-aws/lib/vpc-endpoint" {
 
 const OriginalVpcEndpoint = VpcEndpoint;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 VpcEndpoint = function (
   ...args: [scope: Construct, id: string, config: any]
 ): VpcEndpoint {

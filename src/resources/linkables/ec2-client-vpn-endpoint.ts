@@ -11,7 +11,7 @@ declare module "@cdktf/provider-aws/lib/ec2-client-vpn-endpoint" {
 
 const OriginalEc2ClientVpnEndpoint = Ec2ClientVpnEndpoint;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 Ec2ClientVpnEndpoint = function (
   ...args: [scope: Construct, id: string, config: any]
 ): Ec2ClientVpnEndpoint {

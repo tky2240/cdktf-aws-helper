@@ -13,7 +13,7 @@ declare module "@cdktf/provider-aws/lib/redshift-cluster" {
 
 const OriginalRedshiftCluster = RedshiftCluster;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 RedshiftCluster = function (
   ...args: [scope: Construct, id: string, config: any]
 ): RedshiftCluster {

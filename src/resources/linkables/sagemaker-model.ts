@@ -12,7 +12,7 @@ declare module "@cdktf/provider-aws/lib/sagemaker-model" {
 
 const OriginalSagemakerModel = SagemakerModel;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 SagemakerModel = function (
   ...args: [scope: Construct, id: string, config: any]
 ): SagemakerModel {

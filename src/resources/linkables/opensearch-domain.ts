@@ -11,7 +11,7 @@ declare module "@cdktf/provider-aws/lib/opensearch-domain" {
 
 const OriginalOpensearchDomain = OpensearchDomain;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 OpensearchDomain = function (
   ...args: [scope: Construct, id: string, config: any]
 ): OpensearchDomain {

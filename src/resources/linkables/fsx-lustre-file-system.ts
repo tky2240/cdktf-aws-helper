@@ -11,7 +11,7 @@ declare module "@cdktf/provider-aws/lib/fsx-lustre-file-system" {
 
 const OriginalFsxLustreFileSystem = FsxLustreFileSystem;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 FsxLustreFileSystem = function (
   ...args: [scope: Construct, id: string, config: any]
 ): FsxLustreFileSystem {

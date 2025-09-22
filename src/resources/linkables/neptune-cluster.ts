@@ -12,7 +12,7 @@ declare module "@cdktf/provider-aws/lib/neptune-cluster" {
 
 const OriginalNeptuneCluster = NeptuneCluster;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 NeptuneCluster = function (
   ...args: [scope: Construct, id: string, config: any]
 ): NeptuneCluster {

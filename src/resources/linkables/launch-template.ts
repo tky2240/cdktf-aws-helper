@@ -11,7 +11,7 @@ declare module "@cdktf/provider-aws/lib/launch-template" {
 
 const OriginalLaunchTemplate = LaunchTemplate;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 LaunchTemplate = function (
   ...args: [scope: Construct, id: string, config: any]
 ): LaunchTemplate {

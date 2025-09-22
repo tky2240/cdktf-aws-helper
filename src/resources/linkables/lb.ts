@@ -11,7 +11,7 @@ declare module "@cdktf/provider-aws/lib/lb" {
 
 const OriginalLb = Lb;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 Lb = function (...args: [scope: Construct, id: string, config: any]): Lb {
   const lb = Reflect.construct(OriginalLb, args) as Lb;
   const scope = lb.node.scope;

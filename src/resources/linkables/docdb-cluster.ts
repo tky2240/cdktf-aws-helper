@@ -12,7 +12,7 @@ declare module "@cdktf/provider-aws/lib/docdb-cluster" {
 
 const OriginalDocdbCluster = DocdbCluster;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 DocdbCluster = function (
   ...args: [scope: Construct, id: string, config: any]
 ): DocdbCluster {

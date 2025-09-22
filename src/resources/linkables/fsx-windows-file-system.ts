@@ -11,7 +11,7 @@ declare module "@cdktf/provider-aws/lib/fsx-windows-file-system" {
 
 const OriginalFsxWindowsFileSystem = FsxWindowsFileSystem;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 FsxWindowsFileSystem = function (
   ...args: [scope: Construct, id: string, config: any]
 ): FsxWindowsFileSystem {

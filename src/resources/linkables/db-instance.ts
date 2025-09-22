@@ -12,7 +12,7 @@ declare module "@cdktf/provider-aws/lib/db-instance" {
 
 const OriginalDbInstance = DbInstance;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 DbInstance = function (
   ...args: [scope: Construct, id: string, config: any]
 ): DbInstance {

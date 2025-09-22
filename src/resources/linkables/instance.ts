@@ -12,7 +12,7 @@ declare module "@cdktf/provider-aws/lib/instance" {
 
 const OriginalInstance = Instance;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 Instance = function (
   ...args: [scope: Construct, id: string, config: any]
 ): Instance {

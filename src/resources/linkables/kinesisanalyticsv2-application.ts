@@ -11,7 +11,7 @@ declare module "@cdktf/provider-aws/lib/kinesisanalyticsv2-application" {
 
 const OriginalKinesisanalyticsv2Application = Kinesisanalyticsv2Application;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 Kinesisanalyticsv2Application = function (
   ...args: [scope: Construct, id: string, config: any]
 ): Kinesisanalyticsv2Application {

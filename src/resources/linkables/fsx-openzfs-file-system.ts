@@ -11,7 +11,7 @@ declare module "@cdktf/provider-aws/lib/fsx-openzfs-file-system" {
 
 const OriginalFsxOpenzfsFileSystem = FsxOpenzfsFileSystem;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 FsxOpenzfsFileSystem = function (
   ...args: [scope: Construct, id: string, config: any]
 ): FsxOpenzfsFileSystem {

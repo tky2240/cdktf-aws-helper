@@ -10,7 +10,7 @@ declare module "@cdktf/provider-aws/lib/data-aws-security-group" {
 
 const OriginalDataAwsSecurityGroup = DataAwsSecurityGroup;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 DataAwsSecurityGroup = function (
   ...args: [scope: Construct, id: string, config: any]
 ): DataAwsSecurityGroup {

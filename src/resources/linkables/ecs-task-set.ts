@@ -10,7 +10,7 @@ declare module "@cdktf/provider-aws/lib/ecs-task-set" {
 }
 
 const OriginalEcsTaskSet = EcsTaskSet;
-//@ts-expect-error
+//@ts-expect-error override constructor
 EcsTaskSet = function (
   ...args: [scope: Construct, id: string, config: any]
 ): EcsTaskSet {

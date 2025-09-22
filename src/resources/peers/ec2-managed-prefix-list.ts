@@ -10,7 +10,7 @@ declare module "@cdktf/provider-aws/lib/ec2-managed-prefix-list" {
 
 const OriginalEc2ManagedPrefixList = Ec2ManagedPrefixList;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 Ec2ManagedPrefixList = function (
   ...args: [scope: Construct, id: string, config: any]
 ): Ec2ManagedPrefixList {

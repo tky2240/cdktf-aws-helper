@@ -11,7 +11,7 @@ declare module "@cdktf/provider-aws/lib/synthetics-canary" {
 
 const OriginalSyntheticsCanary = SyntheticsCanary;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 SyntheticsCanary = function (
   ...args: [scope: Construct, id: string, config: any]
 ): SyntheticsCanary {

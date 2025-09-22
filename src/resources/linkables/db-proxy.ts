@@ -11,7 +11,7 @@ declare module "@cdktf/provider-aws/lib/db-proxy" {
 
 const OriginalDbProxy = DbProxy;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 DbProxy = function (
   ...args: [scope: Construct, id: string, config: any]
 ): DbProxy {

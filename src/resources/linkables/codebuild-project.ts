@@ -10,7 +10,7 @@ declare module "@cdktf/provider-aws/lib/codebuild-project" {
 
 const OriginalCodebuildProject = CodebuildProject;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 CodebuildProject = function (
   ...args: [scope: Construct, id: string, config: any]
 ): CodebuildProject {

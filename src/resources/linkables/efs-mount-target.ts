@@ -11,7 +11,7 @@ declare module "@cdktf/provider-aws/lib/efs-mount-target" {
 
 const OriginalEfsMountTarget = EfsMountTarget;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 EfsMountTarget = function (
   ...args: [scope: Construct, id: string, config: any]
 ): EfsMountTarget {

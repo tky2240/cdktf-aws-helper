@@ -11,7 +11,7 @@ declare module "@cdktf/provider-aws/lib/kinesis-firehose-delivery-stream" {
 
 const OriginalKinesisFirehoseDeliveryStream = KinesisFirehoseDeliveryStream;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 KinesisFirehoseDeliveryStream = function (
   ...args: [scope: Construct, id: string, config: any]
 ): KinesisFirehoseDeliveryStream {

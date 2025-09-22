@@ -10,7 +10,7 @@ declare module "@cdktf/provider-aws/lib/security-group" {
 
 const OriginalSecurityGroup = SecurityGroup;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 SecurityGroup = function (
   ...args: [scope: Construct, id: string, config: any]
 ): SecurityGroup {
