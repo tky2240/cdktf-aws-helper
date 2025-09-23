@@ -1,4 +1,7 @@
-import { CodebuildProject } from "@cdktf/provider-aws/lib/codebuild-project";
+import {
+  CodebuildProject,
+  CodebuildProjectConfig,
+} from "@cdktf/provider-aws/lib/codebuild-project";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -10,25 +13,22 @@ declare module "@cdktf/provider-aws/lib/codebuild-project" {
 
 const OriginalCodebuildProject = CodebuildProject;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 CodebuildProject = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: CodebuildProjectConfig]
 ): CodebuildProject {
-  const codebuild = Reflect.construct(
-    OriginalCodebuildProject,
-    args,
-  ) as CodebuildProject;
+  const codebuild = Reflect.construct(OriginalCodebuildProject, args);
   const scope = codebuild.node.scope;
   if (!scope) {
     throw new Error("Codebuild Project must have a scope");
   }
   Object.defineProperty(codebuild, "linkage", {
     get() {
-      //@ts-expect-error
+      //@ts-expect-error check vpc association
       if (codebuild._linkage == null) {
         throw new Error("This Codebuild Project is not associated with a VPC");
       }
-      //@ts-expect-error
+      //@ts-expect-error return private field
       return codebuild._linkage;
     },
   });

@@ -297,7 +297,7 @@ export class Linkage extends Construct implements ILinkage {
     fromPort: Port,
     toPort: Port,
     protocol: Protocol,
-    isTwoWayLink: boolean = true,
+    isTwoWayLink = true,
   ): Linkage {
     this.allow({
       direction: "in",
@@ -319,7 +319,7 @@ export class Linkage extends Construct implements ILinkage {
     fromPort: Port,
     toPort: Port,
     protocol: Protocol,
-    isTwoWayLink: boolean = true,
+    isTwoWayLink = true,
   ): Linkage {
     this.allow({
       direction: "out",

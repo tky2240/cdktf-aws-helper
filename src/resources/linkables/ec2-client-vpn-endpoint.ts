@@ -1,5 +1,8 @@
 import { DataAwsVpc } from "@cdktf/provider-aws/lib/data-aws-vpc";
-import { Ec2ClientVpnEndpoint } from "@cdktf/provider-aws/lib/ec2-client-vpn-endpoint";
+import {
+  Ec2ClientVpnEndpoint,
+  Ec2ClientVpnEndpointConfig,
+} from "@cdktf/provider-aws/lib/ec2-client-vpn-endpoint";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -11,14 +14,11 @@ declare module "@cdktf/provider-aws/lib/ec2-client-vpn-endpoint" {
 
 const OriginalEc2ClientVpnEndpoint = Ec2ClientVpnEndpoint;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 Ec2ClientVpnEndpoint = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: Ec2ClientVpnEndpointConfig]
 ): Ec2ClientVpnEndpoint {
-  const endpoint = Reflect.construct(
-    OriginalEc2ClientVpnEndpoint,
-    args,
-  ) as Ec2ClientVpnEndpoint;
+  const endpoint = Reflect.construct(OriginalEc2ClientVpnEndpoint, args);
   const scope = endpoint.node.scope;
   if (!scope) {
     throw new Error("ClientVpn Endpoint must have a scope");

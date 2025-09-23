@@ -1,6 +1,9 @@
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
 import { DataAwsVpc } from "@cdktf/provider-aws/lib/data-aws-vpc";
-import { SagemakerModel } from "@cdktf/provider-aws/lib/sagemaker-model";
+import {
+  SagemakerModel,
+  SagemakerModelConfig,
+} from "@cdktf/provider-aws/lib/sagemaker-model";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -12,14 +15,11 @@ declare module "@cdktf/provider-aws/lib/sagemaker-model" {
 
 const OriginalSagemakerModel = SagemakerModel;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 SagemakerModel = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: SagemakerModelConfig]
 ): SagemakerModel {
-  const model = Reflect.construct(
-    OriginalSagemakerModel,
-    args,
-  ) as SagemakerModel;
+  const model = Reflect.construct(OriginalSagemakerModel, args);
   const scope = model.node.scope;
   if (!scope) {
     throw new Error("Sagemaker Model must have a scope");

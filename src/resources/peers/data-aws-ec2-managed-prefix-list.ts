@@ -1,4 +1,7 @@
-import { DataAwsEc2ManagedPrefixList } from "@cdktf/provider-aws/lib/data-aws-ec2-managed-prefix-list";
+import {
+  DataAwsEc2ManagedPrefixList,
+  DataAwsEc2ManagedPrefixListConfig,
+} from "@cdktf/provider-aws/lib/data-aws-ec2-managed-prefix-list";
 import { Construct } from "constructs";
 import { IPeer } from "../../linkage";
 
@@ -12,14 +15,18 @@ declare module "@cdktf/provider-aws/lib/data-aws-ec2-managed-prefix-list" {
 
 const OriginalDataAwsEc2ManagedPrefixList = DataAwsEc2ManagedPrefixList;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 DataAwsEc2ManagedPrefixList = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [
+    scope: Construct,
+    id: string,
+    config: DataAwsEc2ManagedPrefixListConfig,
+  ]
 ): DataAwsEc2ManagedPrefixList {
   const prefixList = Reflect.construct(
     OriginalDataAwsEc2ManagedPrefixList,
     args,
-  ) as DataAwsEc2ManagedPrefixList;
+  );
   const scope = prefixList.node.scope;
   if (!scope) {
     throw new Error("DataAwsEc2ManagedPrefixList must have a scope");

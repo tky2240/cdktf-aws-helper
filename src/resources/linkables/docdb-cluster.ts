@@ -1,6 +1,9 @@
 import { DataAwsDbSubnetGroup } from "@cdktf/provider-aws/lib/data-aws-db-subnet-group";
 import { DataAwsVpc } from "@cdktf/provider-aws/lib/data-aws-vpc";
-import { DocdbCluster } from "@cdktf/provider-aws/lib/docdb-cluster";
+import {
+  DocdbCluster,
+  DocdbClusterConfig,
+} from "@cdktf/provider-aws/lib/docdb-cluster";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -12,11 +15,11 @@ declare module "@cdktf/provider-aws/lib/docdb-cluster" {
 
 const OriginalDocdbCluster = DocdbCluster;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 DocdbCluster = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: DocdbClusterConfig]
 ): DocdbCluster {
-  const cluster = Reflect.construct(OriginalDocdbCluster, args) as DocdbCluster;
+  const cluster = Reflect.construct(OriginalDocdbCluster, args);
   const scope = cluster.node.scope;
   if (!scope) {
     throw new Error("Document DB Cluster must have a scope");

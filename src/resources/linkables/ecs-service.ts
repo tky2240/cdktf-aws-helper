@@ -1,5 +1,8 @@
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
-import { EcsService } from "@cdktf/provider-aws/lib/ecs-service";
+import {
+  EcsService,
+  EcsServiceConfig,
+} from "@cdktf/provider-aws/lib/ecs-service";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -10,22 +13,22 @@ declare module "@cdktf/provider-aws/lib/ecs-service" {
 }
 
 const OriginalEcsService = EcsService;
-//@ts-expect-error
+//@ts-expect-error override constructor
 EcsService = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: EcsServiceConfig]
 ): EcsService {
-  const ecsService = Reflect.construct(OriginalEcsService, args) as EcsService;
+  const ecsService = Reflect.construct(OriginalEcsService, args);
   const scope = ecsService.node.scope;
   if (!scope) {
     throw new Error("ECS Service must have a scope");
   }
   Object.defineProperty(ecsService, "linkage", {
     get() {
-      //@ts-expect-error
+      //@ts-expect-error check vpc association
       if (ecsService._linkage == null) {
         throw new Error("This ECS Service is not associated with a VPC");
       }
-      //@ts-expect-error
+      //@ts-expect-error return private field
       return ecsService._linkage;
     },
   });

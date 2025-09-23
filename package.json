@@ -6,7 +6,11 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "jest",
-    "build": "tsc"
+    "build": "tsc",
+    "format": "prettier --write \"./src/**/*.{ts,js,json}\"",
+    "check": "prettier --check \"./src/**/*.{ts,js,json}\"",
+    "lint": "eslint ./src --ext .ts",
+    "fix": "eslint ./src --ext .ts --fix"
   },
   "author": "tky2240",
   "license": "MIT",
@@ -21,7 +25,8 @@
     "prettier-plugin-organize-imports": "^4.2.0",
     "ts-jest": "^29.4.1",
     "tsx": "^4.20.5",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.44.0"
   },
   "dependencies": {
     "@cdktf/provider-aws": "^21.10.0",

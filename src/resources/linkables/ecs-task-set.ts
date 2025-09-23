@@ -1,5 +1,8 @@
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
-import { EcsTaskSet } from "@cdktf/provider-aws/lib/ecs-task-set";
+import {
+  EcsTaskSet,
+  EcsTaskSetConfig,
+} from "@cdktf/provider-aws/lib/ecs-task-set";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -10,22 +13,22 @@ declare module "@cdktf/provider-aws/lib/ecs-task-set" {
 }
 
 const OriginalEcsTaskSet = EcsTaskSet;
-//@ts-expect-error
+//@ts-expect-error override constructor
 EcsTaskSet = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: EcsTaskSetConfig]
 ): EcsTaskSet {
-  const ecsTaskSet = Reflect.construct(OriginalEcsTaskSet, args) as EcsTaskSet;
+  const ecsTaskSet = Reflect.construct(OriginalEcsTaskSet, args);
   const scope = ecsTaskSet.node.scope;
   if (!scope) {
     throw new Error("ECS Task Set must have a scope");
   }
   Object.defineProperty(ecsTaskSet, "linkage", {
     get() {
-      //@ts-expect-error
+      //@ts-expect-error check vpc association
       if (ecsTaskSet._linkage == null) {
         throw new Error("This ECS Task Set is not associated with a VPC");
       }
-      //@ts-expect-error
+      //@ts-expect-error return private field
       return ecsTaskSet._linkage;
     },
   });

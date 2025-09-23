@@ -1,5 +1,8 @@
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
-import { FsxFileCache } from "@cdktf/provider-aws/lib/fsx-file-cache";
+import {
+  FsxFileCache,
+  FsxFileCacheConfig,
+} from "@cdktf/provider-aws/lib/fsx-file-cache";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -11,11 +14,11 @@ declare module "@cdktf/provider-aws/lib/fsx-file-cache" {
 
 const OriginalFsxFileCache = FsxFileCache;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 FsxFileCache = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: FsxFileCacheConfig]
 ): FsxFileCache {
-  const fsx = Reflect.construct(OriginalFsxFileCache, args) as FsxFileCache;
+  const fsx = Reflect.construct(OriginalFsxFileCache, args);
   const scope = fsx.node.scope;
   if (!scope) {
     throw new Error("FSx FileCache must have a scope");

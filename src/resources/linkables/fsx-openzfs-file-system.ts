@@ -1,5 +1,8 @@
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
-import { FsxOpenzfsFileSystem } from "@cdktf/provider-aws/lib/fsx-openzfs-file-system";
+import {
+  FsxOpenzfsFileSystem,
+  FsxOpenzfsFileSystemConfig,
+} from "@cdktf/provider-aws/lib/fsx-openzfs-file-system";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -11,14 +14,11 @@ declare module "@cdktf/provider-aws/lib/fsx-openzfs-file-system" {
 
 const OriginalFsxOpenzfsFileSystem = FsxOpenzfsFileSystem;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 FsxOpenzfsFileSystem = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: FsxOpenzfsFileSystemConfig]
 ): FsxOpenzfsFileSystem {
-  const fsx = Reflect.construct(
-    OriginalFsxOpenzfsFileSystem,
-    args,
-  ) as FsxOpenzfsFileSystem;
+  const fsx = Reflect.construct(OriginalFsxOpenzfsFileSystem, args);
   const scope = fsx.node.scope;
   if (!scope) {
     throw new Error("FSx OpenZFSFileSystem must have a scope");

@@ -6,7 +6,7 @@
   "mounts": [
     "src=cdktf-aws-helper-devcontainer,target=/home/vscode,type=volume"
   ],
-  "onCreateCommand": "mise trust -a && mise install",
+  "onCreateCommand": "/bin/bash .devcontainer/postCreateCommand.sh",
   "customizations": {
     "vscode": {
       "settings": {

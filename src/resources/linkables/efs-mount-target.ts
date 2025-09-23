@@ -1,5 +1,8 @@
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
-import { EfsMountTarget } from "@cdktf/provider-aws/lib/efs-mount-target";
+import {
+  EfsMountTarget,
+  EfsMountTargetConfig,
+} from "@cdktf/provider-aws/lib/efs-mount-target";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -11,14 +14,11 @@ declare module "@cdktf/provider-aws/lib/efs-mount-target" {
 
 const OriginalEfsMountTarget = EfsMountTarget;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 EfsMountTarget = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: EfsMountTargetConfig]
 ): EfsMountTarget {
-  const target = Reflect.construct(
-    OriginalEfsMountTarget,
-    args,
-  ) as EfsMountTarget;
+  const target = Reflect.construct(OriginalEfsMountTarget, args);
   const scope = target.node.scope;
   if (!scope) {
     throw new Error("EFS Mount Target must have a scope");

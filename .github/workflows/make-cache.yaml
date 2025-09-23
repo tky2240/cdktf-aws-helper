@@ -1,8 +1,9 @@
-name: CI
+name: Make Cache
 
 on:
-  pull_request:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   ci:
@@ -12,7 +13,4 @@ jobs:
         uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
 
       - name: Install and Cache Dependencies
-        uses: ./.github/actions/install-and-cache-dependencies
-
-      - name: Run CI tasks
-        run: mise run ci:run
+        uses: .github/actions/install-and-cache-dependencies

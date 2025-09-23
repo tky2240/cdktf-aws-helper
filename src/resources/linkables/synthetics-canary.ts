@@ -1,6 +1,9 @@
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
-import { SyntheticsCanary } from "@cdktf/provider-aws/lib/synthetics-canary";
+import {
+  SyntheticsCanary,
+  SyntheticsCanaryConfig,
+} from "@cdktf/provider-aws/lib/synthetics-canary";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
 import { ILinkable, Linkage } from "../../linkage";
@@ -11,25 +14,22 @@ declare module "@cdktf/provider-aws/lib/synthetics-canary" {
 
 const OriginalSyntheticsCanary = SyntheticsCanary;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 SyntheticsCanary = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: SyntheticsCanaryConfig]
 ): SyntheticsCanary {
-  const canary = Reflect.construct(
-    OriginalSyntheticsCanary,
-    args,
-  ) as SyntheticsCanary;
+  const canary = Reflect.construct(OriginalSyntheticsCanary, args);
   const scope = canary.node.scope;
   if (!scope) {
     throw new Error("Synthetics Canary must have a scope");
   }
   Object.defineProperty(canary, "linkage", {
     get() {
-      //@ts-expect-error
+      //@ts-expect-error check vpc association
       if (canary._linkage == null) {
         throw new Error("This Synthetics Canary is not associated with a VPC");
       }
-      //@ts-expect-error
+      //@ts-expect-error return private field
       return canary._linkage;
     },
   });

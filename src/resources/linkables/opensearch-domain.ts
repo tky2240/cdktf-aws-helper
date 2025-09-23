@@ -1,5 +1,8 @@
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
-import { OpensearchDomain } from "@cdktf/provider-aws/lib/opensearch-domain";
+import {
+  OpensearchDomain,
+  OpensearchDomainConfig,
+} from "@cdktf/provider-aws/lib/opensearch-domain";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -11,25 +14,22 @@ declare module "@cdktf/provider-aws/lib/opensearch-domain" {
 
 const OriginalOpensearchDomain = OpensearchDomain;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 OpensearchDomain = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: OpensearchDomainConfig]
 ): OpensearchDomain {
-  const domain = Reflect.construct(
-    OriginalOpensearchDomain,
-    args,
-  ) as OpensearchDomain;
+  const domain = Reflect.construct(OriginalOpensearchDomain, args);
   const scope = domain.node.scope;
   if (!scope) {
     throw new Error("Opensearch Domain must have a scope");
   }
   Object.defineProperty(domain, "linkage", {
     get() {
-      //@ts-expect-error
+      //@ts-expect-error check vpc association
       if (domain._linkage == null) {
         throw new Error("Only VPC associated Opensearch Domain has linkage");
       }
-      //@ts-expect-error
+      //@ts-expect-error return private field
       return domain._linkage;
     },
   });

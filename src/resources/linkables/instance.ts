@@ -1,6 +1,6 @@
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
 import { DataAwsVpc } from "@cdktf/provider-aws/lib/data-aws-vpc";
-import { Instance } from "@cdktf/provider-aws/lib/instance";
+import { Instance, InstanceConfig } from "@cdktf/provider-aws/lib/instance";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -12,11 +12,11 @@ declare module "@cdktf/provider-aws/lib/instance" {
 
 const OriginalInstance = Instance;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 Instance = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: InstanceConfig]
 ): Instance {
-  const instance = Reflect.construct(OriginalInstance, args) as Instance;
+  const instance = Reflect.construct(OriginalInstance, args);
   const scope = instance.node.scope;
   if (!scope) {
     throw new Error("Instance must have a scope");

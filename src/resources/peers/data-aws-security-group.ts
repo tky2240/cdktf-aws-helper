@@ -1,4 +1,7 @@
-import { DataAwsSecurityGroup } from "@cdktf/provider-aws/lib/data-aws-security-group";
+import {
+  DataAwsSecurityGroup,
+  DataAwsSecurityGroupConfig,
+} from "@cdktf/provider-aws/lib/data-aws-security-group";
 import { Construct } from "constructs";
 import { IPeer } from "../../linkage";
 
@@ -10,14 +13,11 @@ declare module "@cdktf/provider-aws/lib/data-aws-security-group" {
 
 const OriginalDataAwsSecurityGroup = DataAwsSecurityGroup;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 DataAwsSecurityGroup = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: DataAwsSecurityGroupConfig]
 ): DataAwsSecurityGroup {
-  const securityGroup = Reflect.construct(
-    OriginalDataAwsSecurityGroup,
-    args,
-  ) as DataAwsSecurityGroup;
+  const securityGroup = Reflect.construct(OriginalDataAwsSecurityGroup, args);
   const scope = securityGroup.node.scope;
   if (!scope) {
     throw new Error("DataAwsSecurityGroup must have a scope");

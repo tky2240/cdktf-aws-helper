@@ -1,5 +1,5 @@
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
-import { DbProxy } from "@cdktf/provider-aws/lib/db-proxy";
+import { DbProxy, DbProxyConfig } from "@cdktf/provider-aws/lib/db-proxy";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -11,11 +11,11 @@ declare module "@cdktf/provider-aws/lib/db-proxy" {
 
 const OriginalDbProxy = DbProxy;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 DbProxy = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: DbProxyConfig]
 ): DbProxy {
-  const proxy = Reflect.construct(OriginalDbProxy, args) as DbProxy;
+  const proxy = Reflect.construct(OriginalDbProxy, args);
   const scope = proxy.node.scope;
   if (!scope) {
     throw new Error("DB Proxy must have a scope");

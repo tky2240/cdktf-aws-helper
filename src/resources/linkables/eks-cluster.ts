@@ -1,5 +1,8 @@
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
-import { EksCluster } from "@cdktf/provider-aws/lib/eks-cluster";
+import {
+  EksCluster,
+  EksClusterConfig,
+} from "@cdktf/provider-aws/lib/eks-cluster";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -11,11 +14,11 @@ declare module "@cdktf/provider-aws/lib/eks-cluster" {
 
 const OriginalEksCluster = EksCluster;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 EksCluster = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [scope: Construct, id: string, config: EksClusterConfig]
 ): EksCluster {
-  const cluster = Reflect.construct(OriginalEksCluster, args) as EksCluster;
+  const cluster = Reflect.construct(OriginalEksCluster, args);
   const scope = cluster.node.scope;
   if (!scope) {
     throw new Error("EKS Cluster must have a scope");

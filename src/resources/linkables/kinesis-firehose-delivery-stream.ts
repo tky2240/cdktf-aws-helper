@@ -1,5 +1,8 @@
 import { DataAwsSubnet } from "@cdktf/provider-aws/lib/data-aws-subnet";
-import { KinesisFirehoseDeliveryStream } from "@cdktf/provider-aws/lib/kinesis-firehose-delivery-stream";
+import {
+  KinesisFirehoseDeliveryStream,
+  KinesisFirehoseDeliveryStreamConfig,
+} from "@cdktf/provider-aws/lib/kinesis-firehose-delivery-stream";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
@@ -11,25 +14,26 @@ declare module "@cdktf/provider-aws/lib/kinesis-firehose-delivery-stream" {
 
 const OriginalKinesisFirehoseDeliveryStream = KinesisFirehoseDeliveryStream;
 
-//@ts-expect-error
+//@ts-expect-error override constructor
 KinesisFirehoseDeliveryStream = function (
-  ...args: [scope: Construct, id: string, config: any]
+  ...args: [
+    scope: Construct,
+    id: string,
+    config: KinesisFirehoseDeliveryStreamConfig,
+  ]
 ): KinesisFirehoseDeliveryStream {
-  const stream = Reflect.construct(
-    OriginalKinesisFirehoseDeliveryStream,
-    args,
-  ) as KinesisFirehoseDeliveryStream;
+  const stream = Reflect.construct(OriginalKinesisFirehoseDeliveryStream, args);
   const scope = stream.node.scope;
   if (!scope) {
     throw new Error("Kinesis Firehose Delivery Stream must have a scope");
   }
   Object.defineProperty(stream, "linkage", {
     get() {
-      //@ts-expect-error
+      //@ts-expect-error check vpc association
       if (stream._linkage == null) {
         throw new Error("This Stream is not associated with a VPC");
       }
-      //@ts-expect-error
+      //@ts-expect-error return private field
       return stream._linkage;
     },
   });
