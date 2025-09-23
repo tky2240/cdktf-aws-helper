@@ -3,4 +3,4 @@
 #MISE dir="{{ config_root }}"
 
 set -euo pipefail
-npm run format
+npm run check
