@@ -6,3 +6,4 @@ set -euo pipefail
 
 mise run ts:format:check
 mise run ts:lint
+mise run ts:test
