@@ -76,7 +76,7 @@ export const FSX_WINDOWS_FILE_SYSTEM_TEST_SUITE: TestSuite<
     expectedDataAwsSubnet: "subnet-123456",
     expectedError: false,
   },
-  specifiyNoSubnet: {
+  specifyNoSubnet: {
     inputConfig: {
       throughputCapacity: 64,
       subnetIds: [],
