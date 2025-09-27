@@ -8,10 +8,10 @@ import { synthTestStack } from "../synth";
 
 describe("EcsServiceNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(ECS_SERVICE_TEST_SUITE)) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
-      if (suite.expectedError) {
-        return;
-      }
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
       });
