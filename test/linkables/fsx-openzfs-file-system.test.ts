@@ -10,10 +10,10 @@ describe("FsxOpenzfsFileSystemNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(
     FSX_OPENZFS_FILE_SYSTEM_TEST_SUITE,
   )) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
-      if (suite.expectedError) {
-        return;
-      }
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
       });
