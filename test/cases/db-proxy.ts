@@ -98,4 +98,25 @@ export const DB_PROXY_TEST_SUITE: TestSuite<typeof DbProxy> = {
     expectedVpcIdString: createVpcIdString(constructId, "subnet"),
     expectedError: false,
   },
+  specifyNoSubnet: {
+    inputConfig: {
+      name: "test-db-proxy",
+      auth: [
+        {
+          authScheme: "SECRETS",
+          secretArn:
+            "arn:aws:secretsmanager:us-west-2:123456789012:secret:test-secret",
+          iamAuth: "DISABLED",
+        },
+      ],
+      engineFamily: "MYSQL",
+      roleArn: "arn:aws:iam::123456789012:role/test-role",
+      vpcSecurityGroupIds: ["sg-123456"],
+      vpcSubnetIds: [],
+    },
+    inputStackConstructor: (scope, config) => {
+      new DbProxy(scope, constructId, config);
+    },
+    expectedError: true,
+  },
 } as const;

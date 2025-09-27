@@ -6,10 +6,13 @@ import "../../src/resources/linkables/kinesis-firehose-delivery-stream";
 import { KINESIS_FIREHOSE_DELIVERY_STREAM_TEST_SUITE } from "../cases/kinesis-firehose-delivery-stream";
 import { synthTestStack } from "../synth";
 
-describe("KinesisFirehoseDeliveryStreamTestSuites", () => {
+describe("KinesisFirehoseDeliveryStreamNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(
     KINESIS_FIREHOSE_DELIVERY_STREAM_TEST_SUITE,
   )) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -48,6 +51,23 @@ describe("KinesisFirehoseDeliveryStreamTestSuites", () => {
       expect(synthed).toHaveDataSourceWithProperties(DataAwsSubnet, {
         id: suite.expectedDataAwsSubnet,
       });
+    });
+  }
+});
+
+describe("KinesisFirehoseDeliveryStreamErrorTestSuite", () => {
+  for (const [name, suite] of Object.entries(
+    KINESIS_FIREHOSE_DELIVERY_STREAM_TEST_SUITE,
+  )) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

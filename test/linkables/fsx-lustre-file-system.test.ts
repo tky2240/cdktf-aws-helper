@@ -6,10 +6,13 @@ import "../../src/resources/linkables/fsx-lustre-file-system";
 import { FSX_LUSTRE_FILE_SYSTEM_TEST_SUITE } from "../cases/fsx-lustre-file-system";
 import { synthTestStack } from "../synth";
 
-describe("FsxLustreFileSystemTestSuites", () => {
+describe("FsxLustreFileSystemNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(
     FSX_LUSTRE_FILE_SYSTEM_TEST_SUITE,
   )) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -25,6 +28,23 @@ describe("FsxLustreFileSystemTestSuites", () => {
       expect(synthed).toHaveDataSourceWithProperties(DataAwsSubnet, {
         id: suite.expectedDataAwsSubnet,
       });
+    });
+  }
+});
+
+describe("FsxLustreFileSystemErrorTestSuite", () => {
+  for (const [name, suite] of Object.entries(
+    FSX_LUSTRE_FILE_SYSTEM_TEST_SUITE,
+  )) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

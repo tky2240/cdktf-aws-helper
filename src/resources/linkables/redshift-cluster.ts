@@ -40,7 +40,7 @@ RedshiftCluster = function (
       },
     ).subnetIds;
     if (subnetIds == null) {
-      throw new Error("Subnet ID must be specified");
+      throw new Error("Subnet IDs not found in the Redshift Subnet Group");
     }
     return new DataAwsSubnet(scope, `${cluster.node.id}-SubnetData`, {
       id: Fn.element(subnetIds, 0),

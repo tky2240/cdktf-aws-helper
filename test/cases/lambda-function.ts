@@ -84,4 +84,18 @@ export const LAMBDA_FUNCTION_TEST_SUITE: TestSuite<typeof LambdaFunction> = {
     expectedDataAwsSubnet: "subnet-123456",
     expectedError: false,
   },
+  specifyNoSubnet: {
+    inputConfig: {
+      functionName: "test-lambda-fn",
+      role: "arn:aws:iam::123456789012:role/lambda_role",
+      vpcConfig: {
+        subnetIds: [],
+        securityGroupIds: ["sg-123456"],
+      },
+    },
+    inputStackConstructor: (scope, config) => {
+      new LambdaFunction(scope, constructId, config);
+    },
+    expectedError: true,
+  },
 } as const;

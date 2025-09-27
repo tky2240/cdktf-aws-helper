@@ -6,10 +6,13 @@ import "../../src/resources/linkables/fsx-windows-file-system";
 import { FSX_WINDOWS_FILE_SYSTEM_TEST_SUITE } from "../cases/fsx-windows-file-system";
 import { synthTestStack } from "../synth";
 
-describe("FsxWindowsFileSystemTestSuites", () => {
+describe("FsxWindowsFileSystemNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(
     FSX_WINDOWS_FILE_SYSTEM_TEST_SUITE,
   )) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -26,6 +29,23 @@ describe("FsxWindowsFileSystemTestSuites", () => {
       expect(synthed).toHaveDataSourceWithProperties(DataAwsSubnet, {
         id: suite.expectedDataAwsSubnet,
       });
+    });
+  }
+});
+
+describe("FsxWindowsFileSystemErrorTestSuite", () => {
+  for (const [name, suite] of Object.entries(
+    FSX_WINDOWS_FILE_SYSTEM_TEST_SUITE,
+  )) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

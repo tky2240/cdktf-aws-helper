@@ -6,26 +6,46 @@ import "../../src/resources/linkables/apprunner-vpc-connector";
 import { APPRUNNER_VPC_CONNECTOR_TEST_SUITE } from "../cases/apprunner-vpc-connector";
 import { synthTestStack } from "../synth";
 
-describe("ApprunnerTestSuites", () => {
-  for (const [name, suite] of Object.entries(
+describe("ApprunnerNormalTestSuite", () => {
+  for (const [name, testCase] of Object.entries(
     APPRUNNER_VPC_CONNECTOR_TEST_SUITE,
   )) {
+    if (testCase.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
-        suite.inputStackConstructor(scope, suite.inputConfig);
+        testCase.inputStackConstructor(scope, testCase.inputConfig);
       });
       expect(synthed).toHaveResourceWithProperties(ApprunnerVpcConnector, {
-        vpc_connector_name: suite.inputConfig.vpcConnectorName,
-        subnets: suite.inputConfig.subnets,
-        security_groups: suite.expectedSecurityGroupIdsString,
+        vpc_connector_name: testCase.inputConfig.vpcConnectorName,
+        subnets: testCase.inputConfig.subnets,
+        security_groups: testCase.expectedSecurityGroupIdsString,
       });
       expect(synthed).toHaveResourceWithProperties(SecurityGroup, {
-        name: suite.expectedSecurityGroupName,
-        vpc_id: suite.expectedVpcIdString,
+        name: testCase.expectedSecurityGroupName,
+        vpc_id: testCase.expectedVpcIdString,
       });
       expect(synthed).toHaveDataSourceWithProperties(DataAwsSubnet, {
-        id: suite.expectedDataAwsSubnet,
+        id: testCase.expectedDataAwsSubnet,
       });
+    });
+  }
+});
+
+describe("ApprunnerErrorTestSuite", () => {
+  for (const [name, testCase] of Object.entries(
+    APPRUNNER_VPC_CONNECTOR_TEST_SUITE,
+  )) {
+    if (!testCase.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          testCase.inputStackConstructor(scope, testCase.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

@@ -6,8 +6,11 @@ import "../../src/resources/linkables/fsx-file-cache";
 import { FSX_FILE_CACHE_TEST_SUITE } from "../cases/fsx-file-cache";
 import { synthTestStack } from "../synth";
 
-describe("FsxFileCacheTestSuites", () => {
+describe("FsxFileCacheNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(FSX_FILE_CACHE_TEST_SUITE)) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -26,6 +29,21 @@ describe("FsxFileCacheTestSuites", () => {
       expect(synthed).toHaveDataSourceWithProperties(DataAwsSubnet, {
         id: suite.expectedDataAwsSubnet,
       });
+    });
+  }
+});
+
+describe("FsxFileCacheErrorTestSuite", () => {
+  for (const [name, suite] of Object.entries(FSX_FILE_CACHE_TEST_SUITE)) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

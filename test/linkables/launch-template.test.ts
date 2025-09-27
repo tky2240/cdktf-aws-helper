@@ -5,8 +5,11 @@ import "../../src/resources/linkables/launch-template";
 import { LAUNCH_TEMPLATE_TEST_SUITE } from "../cases/launch-template";
 import { synthTestStack } from "../synth";
 
-describe("LaunchTemplateTestSuites", () => {
+describe("LaunchTemplateNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(LAUNCH_TEMPLATE_TEST_SUITE)) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -30,6 +33,21 @@ describe("LaunchTemplateTestSuites", () => {
           vpc_id: suite.expectedVpcIdString,
         });
       }
+    });
+  }
+});
+
+describe("LaunchTemplateErrorTestSuite", () => {
+  for (const [name, suite] of Object.entries(LAUNCH_TEMPLATE_TEST_SUITE)) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

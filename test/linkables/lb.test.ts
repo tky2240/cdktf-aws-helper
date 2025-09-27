@@ -6,8 +6,11 @@ import "../../src/resources/linkables/lb";
 import { LB_TEST_SUITE } from "../cases/lb";
 import { synthTestStack } from "../synth";
 
-describe("LBTestSuites", () => {
+describe("LBTestNormalSuite", () => {
   for (const [name, suite] of Object.entries(LB_TEST_SUITE)) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -26,6 +29,21 @@ describe("LBTestSuites", () => {
       expect(synthed).toHaveDataSourceWithProperties(DataAwsSubnet, {
         id: suite.expectedDataAwsSubnet,
       });
+    });
+  }
+});
+
+describe("LBTestErrorSuite", () => {
+  for (const [name, suite] of Object.entries(LB_TEST_SUITE)) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

@@ -6,8 +6,11 @@ import "../../src/resources/linkables/rds-cluster";
 import { RDS_CLUSTER_TEST_SUITE } from "../cases/rds-cluster";
 import { synthTestStack } from "../synth";
 
-describe("RDSClusterTestSuites", () => {
+describe("RDSClusterNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(RDS_CLUSTER_TEST_SUITE)) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -25,6 +28,21 @@ describe("RDSClusterTestSuites", () => {
       expect(synthed).toHaveDataSourceWithProperties(DataAwsDbSubnetGroup, {
         name: suite.inputConfig?.dbSubnetGroupName,
       });
+    });
+  }
+});
+
+describe("RDSClusterErrorTestSuite", () => {
+  for (const [name, suite] of Object.entries(RDS_CLUSTER_TEST_SUITE)) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

@@ -6,8 +6,11 @@ import "../../src/resources/linkables/msk-cluster";
 import { MSK_CLUSTER_TEST_SUITE } from "../cases/msk-cluster";
 import { synthTestStack } from "../synth";
 
-describe("MskClusterTestSuites", () => {
+describe("MskClusterNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(MSK_CLUSTER_TEST_SUITE)) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -29,6 +32,21 @@ describe("MskClusterTestSuites", () => {
       expect(synthed).toHaveDataSourceWithProperties(DataAwsSubnet, {
         id: suite.expectedDataAwsSubnet,
       });
+    });
+  }
+});
+
+describe("MskClusterErrorTestSuite", () => {
+  for (const [name, suite] of Object.entries(MSK_CLUSTER_TEST_SUITE)) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

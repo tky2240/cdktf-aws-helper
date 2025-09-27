@@ -6,8 +6,11 @@ import "../../src/resources/linkables/neptune-cluster";
 import { NEPTUNE_CLUSTER_TEST_SUITE } from "../cases/neptune-cluster";
 import { synthTestStack } from "../synth";
 
-describe("NeptuneClusterTestSuites", () => {
+describe("NeptuneClusterNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(NEPTUNE_CLUSTER_TEST_SUITE)) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -25,6 +28,21 @@ describe("NeptuneClusterTestSuites", () => {
       expect(synthed).toHaveDataSourceWithProperties(DataAwsDbSubnetGroup, {
         name: suite.inputConfig?.neptuneSubnetGroupName,
       });
+    });
+  }
+});
+
+describe("NeptuneClusterErrorTestSuite", () => {
+  for (const [name, suite] of Object.entries(NEPTUNE_CLUSTER_TEST_SUITE)) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

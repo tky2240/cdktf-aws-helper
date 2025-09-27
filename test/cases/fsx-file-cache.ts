@@ -80,4 +80,17 @@ export const FSX_FILE_CACHE_TEST_SUITE: TestSuite<typeof FsxFileCache> = {
     expectedDataAwsSubnet: "subnet-123456",
     expectedError: false,
   },
+  specifyNoSubnet: {
+    inputConfig: {
+      fileCacheType: "LUSTRE",
+      fileCacheTypeVersion: "2.12",
+      storageCapacity: 1200,
+      subnetIds: [],
+      securityGroupIds: ["sg-123456"],
+    },
+    inputStackConstructor: (scope, config) => {
+      new FsxFileCache(scope, constructId, config);
+    },
+    expectedError: true,
+  },
 } as const;

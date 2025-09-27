@@ -76,4 +76,15 @@ export const FSX_WINDOWS_FILE_SYSTEM_TEST_SUITE: TestSuite<
     expectedDataAwsSubnet: "subnet-123456",
     expectedError: false,
   },
+  specifyNoSubnet: {
+    inputConfig: {
+      throughputCapacity: 64,
+      subnetIds: [],
+      securityGroupIds: ["sg-123456"],
+    },
+    inputStackConstructor: (scope, config) => {
+      new FsxWindowsFileSystem(scope, constructId, config);
+    },
+    expectedError: true,
+  },
 } as const;

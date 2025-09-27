@@ -6,8 +6,11 @@ import "../../src/resources/linkables/db-proxy";
 import { DB_PROXY_TEST_SUITE } from "../cases/db-proxy";
 import { synthTestStack } from "../synth";
 
-describe("DbProxyTestSuites", () => {
+describe("DbProxyNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(DB_PROXY_TEST_SUITE)) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -39,6 +42,21 @@ describe("DbProxyTestSuites", () => {
       expect(synthed).toHaveDataSourceWithProperties(DataAwsSubnet, {
         id: suite.inputConfig.vpcSubnetIds[0],
       });
+    });
+  }
+});
+
+describe("DbProxyErrorTestSuite", () => {
+  for (const [name, suite] of Object.entries(DB_PROXY_TEST_SUITE)) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

@@ -83,4 +83,17 @@ export const ECS_SERVICE_TEST_SUITE: TestSuite<typeof EcsService> = {
     expectedDataAwsSubnet: "subnet-123456",
     expectedError: false,
   },
+  specifyNoSubnet: {
+    inputConfig: {
+      name: "test-ecs-service",
+      networkConfiguration: {
+        securityGroups: ["sg-123456"],
+        subnets: [],
+      },
+    },
+    inputStackConstructor: (scope, config) => {
+      new EcsService(scope, constructId, config);
+    },
+    expectedError: true,
+  },
 } as const;

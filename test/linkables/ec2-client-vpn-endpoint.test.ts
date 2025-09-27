@@ -5,10 +5,13 @@ import "../../src/resources/linkables/ec2-client-vpn-endpoint";
 import { EC2_CLIENT_VPN_ENDPOINT_TEST_SUITE } from "../cases/ec2-client-vpn-endpoint";
 import { synthTestStack } from "../synth";
 
-describe("Ec2ClientVpnEndpointTestSuites", () => {
+describe("Ec2ClientVpnEndpointNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(
     EC2_CLIENT_VPN_ENDPOINT_TEST_SUITE,
   )) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -39,6 +42,23 @@ describe("Ec2ClientVpnEndpointTestSuites", () => {
         name: suite.expectedSecurityGroupName,
         vpc_id: suite.expectedVpcIdString,
       });
+    });
+  }
+});
+
+describe("Ec2ClientVpnEndpointErrorTestSuite", () => {
+  for (const [name, suite] of Object.entries(
+    EC2_CLIENT_VPN_ENDPOINT_TEST_SUITE,
+  )) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

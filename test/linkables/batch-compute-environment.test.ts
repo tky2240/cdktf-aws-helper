@@ -6,10 +6,13 @@ import "../../src/resources/linkables/batch-compute-environment";
 import { BATCH_COMPUTE_ENVIRONMENT_TEST_SUITE } from "../cases/batch-compute-environments";
 import { synthTestStack } from "../synth";
 
-describe("BatchComputeEnvironmentTestSuites", () => {
+describe("BatchComputeEnvironmentNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(
     BATCH_COMPUTE_ENVIRONMENT_TEST_SUITE,
   )) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -32,6 +35,23 @@ describe("BatchComputeEnvironmentTestSuites", () => {
       expect(synthed).toHaveDataSourceWithProperties(DataAwsSubnet, {
         id: suite.expectedDataAwsSubnet,
       });
+    });
+  }
+});
+
+describe("BatchComputeEnvironmentErrorTestSuite", () => {
+  for (const [name, suite] of Object.entries(
+    BATCH_COMPUTE_ENVIRONMENT_TEST_SUITE,
+  )) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

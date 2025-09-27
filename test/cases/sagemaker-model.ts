@@ -84,4 +84,18 @@ export const SAGEMAKER_MODEL_TEST_SUITE: TestSuite<typeof SagemakerModel> = {
     expectedDataAwsSubnet: "subnet-123456",
     expectedError: false,
   },
+  specifyNoSubnet: {
+    inputConfig: {
+      name: "test-model",
+      executionRoleArn: "arn:aws:iam::123456789012:role/SageMakerRole",
+      vpcConfig: {
+        securityGroupIds: ["sg-123456"],
+        subnets: [],
+      },
+    },
+    inputStackConstructor: (scope, config) => {
+      new SagemakerModel(scope, constructId, config);
+    },
+    expectedError: true,
+  },
 } as const;

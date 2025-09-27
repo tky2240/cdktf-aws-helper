@@ -6,8 +6,11 @@ import "../../src/resources/linkables/lambda-function";
 import { LAMBDA_FUNCTION_TEST_SUITE } from "../cases/lambda-function";
 import { synthTestStack } from "../synth";
 
-describe("LambdaFunctionTestSuites", () => {
+describe("LambdaFunctionNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(LAMBDA_FUNCTION_TEST_SUITE)) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -26,6 +29,21 @@ describe("LambdaFunctionTestSuites", () => {
       expect(synthed).toHaveDataSourceWithProperties(DataAwsSubnet, {
         id: suite.expectedDataAwsSubnet,
       });
+    });
+  }
+});
+
+describe("LambdaFunctionErrorTestSuite", () => {
+  for (const [name, suite] of Object.entries(LAMBDA_FUNCTION_TEST_SUITE)) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

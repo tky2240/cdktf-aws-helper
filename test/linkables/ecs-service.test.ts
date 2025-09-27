@@ -6,8 +6,11 @@ import "../../src/resources/linkables/ecs-service";
 import { ECS_SERVICE_TEST_SUITE } from "../cases/ecs-service";
 import { synthTestStack } from "../synth";
 
-describe("EcsServiceTestSuites", () => {
+describe("EcsServiceNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(ECS_SERVICE_TEST_SUITE)) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -29,6 +32,21 @@ describe("EcsServiceTestSuites", () => {
       expect(synthed).toHaveDataSourceWithProperties(DataAwsSubnet, {
         id: suite.expectedDataAwsSubnet,
       });
+    });
+  }
+});
+
+describe("EcsServiceErrorTestSuite", () => {
+  for (const [name, suite] of Object.entries(ECS_SERVICE_TEST_SUITE)) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

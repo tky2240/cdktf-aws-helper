@@ -82,4 +82,17 @@ export const FSX_OPENZFS_FILE_SYSTEM_TEST_SUITE: TestSuite<
     expectedDataAwsSubnet: "subnet-123456",
     expectedError: false,
   },
+  specifyNoSubnet: {
+    inputConfig: {
+      deploymentType: "MULTI_AZ_1",
+      preferredSubnetId: "subnet-123456",
+      throughputCapacity: 64,
+      subnetIds: [],
+      securityGroupIds: ["sg-123456"],
+    },
+    inputStackConstructor: (scope, config) => {
+      new FsxOpenzfsFileSystem(scope, constructId, config);
+    },
+    expectedError: true,
+  },
 } as const;

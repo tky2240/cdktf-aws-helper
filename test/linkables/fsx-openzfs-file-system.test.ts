@@ -6,10 +6,13 @@ import "../../src/resources/linkables/fsx-openzfs-file-system";
 import { FSX_OPENZFS_FILE_SYSTEM_TEST_SUITE } from "../cases/fsx-openzfs-file-system";
 import { synthTestStack } from "../synth";
 
-describe("FsxOpenzfsFileSystemTestSuites", () => {
+describe("FsxOpenzfsFileSystemNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(
     FSX_OPENZFS_FILE_SYSTEM_TEST_SUITE,
   )) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -28,6 +31,23 @@ describe("FsxOpenzfsFileSystemTestSuites", () => {
       expect(synthed).toHaveDataSourceWithProperties(DataAwsSubnet, {
         id: suite.expectedDataAwsSubnet,
       });
+    });
+  }
+});
+
+describe("FsxOpenzfsFileSystemErrorTestSuite", () => {
+  for (const [name, suite] of Object.entries(
+    FSX_OPENZFS_FILE_SYSTEM_TEST_SUITE,
+  )) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

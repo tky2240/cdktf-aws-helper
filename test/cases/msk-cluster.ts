@@ -87,4 +87,20 @@ export const MSK_CLUSTER_TEST_SUITE: TestSuite<typeof MskCluster> = {
     expectedDataAwsSubnet: "subnet-123456",
     expectedError: false,
   },
+  specifyNoSubnet: {
+    inputConfig: {
+      clusterName: "test-msk-cluster",
+      kafkaVersion: "2.8.0",
+      numberOfBrokerNodes: 3,
+      brokerNodeGroupInfo: {
+        instanceType: "kafka.m5.large",
+        clientSubnets: [],
+        securityGroups: ["sg-123456"],
+      },
+    },
+    inputStackConstructor: (scope, config) => {
+      new MskCluster(scope, constructId, config);
+    },
+    expectedError: true,
+  },
 } as const;
