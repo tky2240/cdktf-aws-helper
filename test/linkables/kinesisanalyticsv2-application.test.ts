@@ -6,10 +6,13 @@ import "../../src/resources/linkables/kinesisanalyticsv2-application";
 import { KINESISANALYTICSV2_APPLICATION_TEST_SUITE } from "../cases/kinesisanalyticsv2-application";
 import { synthTestStack } from "../synth";
 
-describe("KinesisAnalyticsV2ApplicationTestSuites", () => {
+describe("KinesisAnalyticsV2ApplicationNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(
     KINESISANALYTICSV2_APPLICATION_TEST_SUITE,
   )) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -47,6 +50,23 @@ describe("KinesisAnalyticsV2ApplicationTestSuites", () => {
       expect(synthed).toHaveDataSourceWithProperties(DataAwsSubnet, {
         id: suite.expectedDataAwsSubnet,
       });
+    });
+  }
+});
+
+describe("KinesisAnalyticsV2ApplicationErrorTestSuite", () => {
+  for (const [name, suite] of Object.entries(
+    KINESISANALYTICSV2_APPLICATION_TEST_SUITE,
+  )) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

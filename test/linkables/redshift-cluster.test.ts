@@ -6,8 +6,11 @@ import "../../src/resources/linkables/redshift-cluster";
 import { REDSHIFT_CLUSTER_TEST_SUITE } from "../cases/redshift-cluster";
 import { synthTestStack } from "../synth";
 
-describe("RedshiftClusterTestSuites", () => {
+describe("RedshiftClusterNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(REDSHIFT_CLUSTER_TEST_SUITE)) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -30,6 +33,21 @@ describe("RedshiftClusterTestSuites", () => {
           name: suite.inputConfig?.clusterSubnetGroupName,
         },
       );
+    });
+  }
+});
+
+describe("RedshiftClusterErrorTestSuite", () => {
+  for (const [name, suite] of Object.entries(REDSHIFT_CLUSTER_TEST_SUITE)) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

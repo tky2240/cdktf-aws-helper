@@ -5,8 +5,11 @@ import "../../src/resources/linkables/codebuild-project";
 import { CODEBUILD_PROJECT_TEST_SUITE } from "../cases/codebuild-project";
 import { synthTestStack } from "../synth";
 
-describe("CodebuildProjectTestSuite", () => {
+describe("CodebuildProjectNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(CODEBUILD_PROJECT_TEST_SUITE)) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -31,6 +34,21 @@ describe("CodebuildProjectTestSuite", () => {
         name: suite.expectedSecurityGroupName,
         vpc_id: suite.expectedVpcIdString,
       });
+    });
+  }
+});
+
+describe("CodebuildProjectErrorTestSuite", () => {
+  for (const [name, suite] of Object.entries(CODEBUILD_PROJECT_TEST_SUITE)) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

@@ -6,8 +6,11 @@ import "../../src/resources/linkables/efs-mount-target";
 import { EFS_MOUNT_TARGET_TEST_SUITE } from "../cases/efs-mount-target";
 import { synthTestStack } from "../synth";
 
-describe("EfsMountTargetTestSuites", () => {
+describe("EfsMountTargetNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(EFS_MOUNT_TARGET_TEST_SUITE)) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -24,6 +27,21 @@ describe("EfsMountTargetTestSuites", () => {
       expect(synthed).toHaveDataSourceWithProperties(DataAwsSubnet, {
         id: suite.expectedDataAwsSubnet,
       });
+    });
+  }
+});
+
+describe("EfsMountTargetErrorTestSuite", () => {
+  for (const [name, suite] of Object.entries(EFS_MOUNT_TARGET_TEST_SUITE)) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

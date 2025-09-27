@@ -6,8 +6,11 @@ import "../../src/resources/linkables/synthetics-canary";
 import { SYNTHETICS_CANARY_TEST_SUITE } from "../cases/synthetics-canary";
 import { synthTestStack } from "../synth";
 
-describe("SyntheticsCanaryTestSuites", () => {
+describe("SyntheticsCanaryNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(SYNTHETICS_CANARY_TEST_SUITE)) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -31,6 +34,21 @@ describe("SyntheticsCanaryTestSuites", () => {
       expect(synthed).toHaveDataSourceWithProperties(DataAwsSubnet, {
         id: suite.expectedDataAwsSubnet,
       });
+    });
+  }
+});
+
+describe("SyntheticsCanaryErrorTestSuite", () => {
+  for (const [name, suite] of Object.entries(SYNTHETICS_CANARY_TEST_SUITE)) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

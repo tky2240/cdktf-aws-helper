@@ -6,8 +6,11 @@ import "../../src/resources/linkables/instance";
 import { INSTANCE_TEST_SUITE } from "../cases/instance";
 import { synthTestStack } from "../synth";
 
-describe("InstanceTestSuites", () => {
+describe("InstanceTestNormalSuite", () => {
   for (const [name, suite] of Object.entries(INSTANCE_TEST_SUITE)) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -25,6 +28,21 @@ describe("InstanceTestSuites", () => {
       expect(synthed).toHaveDataSourceWithProperties(DataAwsSubnet, {
         id: suite.expectedDataAwsSubnet,
       });
+    });
+  }
+});
+
+describe("InstanceTestErrorSuite", () => {
+  for (const [name, suite] of Object.entries(INSTANCE_TEST_SUITE)) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

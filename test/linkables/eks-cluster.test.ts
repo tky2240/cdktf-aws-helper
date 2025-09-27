@@ -6,8 +6,11 @@ import "../../src/resources/linkables/eks-cluster";
 import { EKS_CLUSTER_TEST_SUITE } from "../cases/eks-cluster";
 import { synthTestStack } from "../synth";
 
-describe("EksClusterTestSuites", () => {
+describe("EksClusterNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(EKS_CLUSTER_TEST_SUITE)) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -27,6 +30,21 @@ describe("EksClusterTestSuites", () => {
       expect(synthed).toHaveDataSourceWithProperties(DataAwsSubnet, {
         id: suite.expectedDataAwsSubnet,
       });
+    });
+  }
+});
+
+describe("EksClusterErrorTestSuite", () => {
+  for (const [name, suite] of Object.entries(EKS_CLUSTER_TEST_SUITE)) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

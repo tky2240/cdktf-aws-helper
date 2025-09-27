@@ -5,8 +5,11 @@ import "../../src/resources/linkables/vpc-endpoint";
 import { VPC_ENDPOINT_TEST_SUITE } from "../cases/vpc-endpoint";
 import { synthTestStack } from "../synth";
 
-describe("VPCEndpointTestSuites", () => {
+describe("VPCEndpointNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(VPC_ENDPOINT_TEST_SUITE)) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -22,9 +25,21 @@ describe("VPCEndpointTestSuites", () => {
         name: suite.expectedSecurityGroupName,
         vpc_id: suite.expectedVpcIdString,
       });
-      // expect(synthed).toHaveDataSourceWithProperties(DataAwsSubnet, {
-      //   id: suite.expectedDataAwsSubnet,
-      // });
+    });
+  }
+});
+
+describe("VPCEndpointErrorTestSuite", () => {
+  for (const [name, suite] of Object.entries(VPC_ENDPOINT_TEST_SUITE)) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

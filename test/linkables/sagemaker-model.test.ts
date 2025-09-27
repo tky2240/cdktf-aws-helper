@@ -6,8 +6,11 @@ import "../../src/resources/linkables/sagemaker-model";
 import { SAGEMAKER_MODEL_TEST_SUITE } from "../cases/sagemaker-model";
 import { synthTestStack } from "../synth";
 
-describe("SagemakerModelTestSuites", () => {
+describe("SagemakerModelNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(SAGEMAKER_MODEL_TEST_SUITE)) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -27,6 +30,21 @@ describe("SagemakerModelTestSuites", () => {
       expect(synthed).toHaveDataSourceWithProperties(DataAwsSubnet, {
         id: suite.expectedDataAwsSubnet,
       });
+    });
+  }
+});
+
+describe("SagemakerModelErrorTestSuite", () => {
+  for (const [name, suite] of Object.entries(SAGEMAKER_MODEL_TEST_SUITE)) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

@@ -6,8 +6,11 @@ import "../../src/resources/linkables/opensearch-domain";
 import { OPENSEARCH_DOMAIN_TEST_SUITE } from "../cases/opensearch-domain";
 import { synthTestStack } from "../synth";
 
-describe("OpensearchDomainTestSuites", () => {
+describe("OpensearchDomainNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(OPENSEARCH_DOMAIN_TEST_SUITE)) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -29,6 +32,21 @@ describe("OpensearchDomainTestSuites", () => {
       expect(synthed).toHaveDataSourceWithProperties(DataAwsSubnet, {
         id: suite.expectedDataAwsSubnet,
       });
+    });
+  }
+});
+
+describe("OpensearchDomainErrorTestSuite", () => {
+  for (const [name, suite] of Object.entries(OPENSEARCH_DOMAIN_TEST_SUITE)) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

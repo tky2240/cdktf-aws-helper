@@ -6,8 +6,11 @@ import "../../src/resources/linkables/ecs-task-set";
 import { ECS_TASK_SET_TEST_SUITE } from "../cases/ecs-task-set";
 import { synthTestStack } from "../synth";
 
-describe("EcsTaskSetTestSuites", () => {
+describe("EcsTaskSetNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(ECS_TASK_SET_TEST_SUITE)) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -28,6 +31,21 @@ describe("EcsTaskSetTestSuites", () => {
       expect(synthed).toHaveDataSourceWithProperties(DataAwsSubnet, {
         id: suite.expectedDataAwsSubnet,
       });
+    });
+  }
+});
+
+describe("EcsTaskSetErrorTestSuite", () => {
+  for (const [name, suite] of Object.entries(ECS_TASK_SET_TEST_SUITE)) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

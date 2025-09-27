@@ -6,8 +6,11 @@ import "../../src/resources/linkables/docdb-cluster";
 import { DOCDB_CLUSTER_TEST_SUITE } from "../cases/docdb-cluster";
 import { synthTestStack } from "../synth";
 
-describe("DocdbClusterTestSuites", () => {
+describe("DocdbClusterNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(DOCDB_CLUSTER_TEST_SUITE)) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -30,6 +33,21 @@ describe("DocdbClusterTestSuites", () => {
       expect(synthed).toHaveDataSourceWithProperties(DataAwsDbSubnetGroup, {
         name: suite.inputConfig.dbSubnetGroupName,
       });
+    });
+  }
+});
+
+describe("DocdbClusterErrorTestSuite", () => {
+  for (const [name, suite] of Object.entries(DOCDB_CLUSTER_TEST_SUITE)) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });

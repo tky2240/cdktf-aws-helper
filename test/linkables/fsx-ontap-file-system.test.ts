@@ -6,10 +6,13 @@ import "../../src/resources/linkables/fsx-ontap-file-system";
 import { FSX_ONTAP_FILE_SYSTEM_TEST_SUITE } from "../cases/fsx-ontap-file-system";
 import { synthTestStack } from "../synth";
 
-describe("FsxOntapFileSystemTestSuites", () => {
+describe("FsxOntapFileSystemNormalTestSuite", () => {
   for (const [name, suite] of Object.entries(
     FSX_ONTAP_FILE_SYSTEM_TEST_SUITE,
   )) {
+    if (suite.expectedError) {
+      continue;
+    }
     test(name, () => {
       const synthed = synthTestStack((scope) => {
         suite.inputStackConstructor(scope, suite.inputConfig);
@@ -28,6 +31,23 @@ describe("FsxOntapFileSystemTestSuites", () => {
       expect(synthed).toHaveDataSourceWithProperties(DataAwsSubnet, {
         id: suite.expectedDataAwsSubnet,
       });
+    });
+  }
+});
+
+describe("FsxOntapFileSystemErrorTestSuite", () => {
+  for (const [name, suite] of Object.entries(
+    FSX_ONTAP_FILE_SYSTEM_TEST_SUITE,
+  )) {
+    if (!suite.expectedError) {
+      continue;
+    }
+    test(name, () => {
+      expect(() =>
+        synthTestStack((scope) => {
+          suite.inputStackConstructor(scope, suite.inputConfig);
+        }),
+      ).toThrow();
     });
   }
 });
