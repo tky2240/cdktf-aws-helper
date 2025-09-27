@@ -75,4 +75,17 @@ export const LB_TEST_SUITE: TestSuite<typeof Lb> = {
     expectedDataAwsSubnet: "subnet-123456",
     expectedError: false,
   },
+  specifyNoSubnet: {
+    inputConfig: {
+      name: "test-lb",
+      internal: false,
+      loadBalancerType: "application",
+      securityGroups: ["sg-123456"],
+      subnets: [],
+    },
+    inputStackConstructor: (scope, config) => {
+      new Lb(scope, constructId, config);
+    },
+    expectedError: true,
+  },
 } as const;

@@ -99,4 +99,21 @@ export const SYNTHETICS_CANARY_TEST_SUITE: TestSuite<typeof SyntheticsCanary> =
       expectedDataAwsSubnet: "subnet-123456",
       expectedError: false,
     },
+    specifyNoSubnet: {
+      inputConfig: {
+        name: "test-canary",
+        artifactS3Location: "s3://my-canary-artifacts/",
+        handler: "index.handler",
+        runtimeVersion: "syn-nodejs-2.0",
+        schedule: { expression: "rate(5 minutes)" },
+        executionRoleArn: "arn:aws:iam::123456789012:role/CanaryRole",
+        vpcConfig: {
+          securityGroupIds: ["sg-123456"],
+        },
+      },
+      inputStackConstructor: (scope, config) => {
+        new SyntheticsCanary(scope, constructId, config);
+      },
+      expectedError: true,
+    },
   } as const;

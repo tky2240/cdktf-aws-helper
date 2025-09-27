@@ -119,4 +119,28 @@ export const KINESIS_FIREHOSE_DELIVERY_STREAM_TEST_SUITE: TestSuite<
     expectedDataAwsSubnet: "subnet-123456",
     expectedError: false,
   },
+  specifyNoSubnet: {
+    inputConfig: {
+      name: "test-firehose",
+      destination: "opensearch",
+      opensearchConfiguration: {
+        roleArn: "arn:aws:iam::123456789012:role/firehose_role",
+        domainArn: "arn:aws:es:us-west-2:123456789012:domain/test-domain",
+        indexName: "test-index",
+        s3Configuration: {
+          roleArn: "arn:aws:iam::123456789012:role/firehose_role",
+          bucketArn: "arn:aws:s3:::test-bucket",
+        },
+        vpcConfig: {
+          subnetIds: [],
+          securityGroupIds: ["sg-123456"],
+          roleArn: "arn:aws:iam::123456789012:role/firehose_role",
+        },
+      },
+    },
+    inputStackConstructor: (scope, config) => {
+      new KinesisFirehoseDeliveryStream(scope, constructId, config);
+    },
+    expectedError: true,
+  },
 } as const;

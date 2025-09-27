@@ -86,4 +86,18 @@ export const EKS_CLUSTER_TEST_SUITE: TestSuite<typeof EksCluster> = {
     expectedDataAwsSubnet: "subnet-123456",
     expectedError: false,
   },
+  specifyNoSubnet: {
+    inputConfig: {
+      name: "test-eks",
+      roleArn: "arn:aws:iam::123456789012:role/eksClusterRole",
+      vpcConfig: {
+        subnetIds: [],
+        securityGroupIds: ["sg-123456"],
+      },
+    },
+    inputStackConstructor: (scope, config) => {
+      new EksCluster(scope, constructId, config);
+    },
+    expectedError: true,
+  },
 } as const;

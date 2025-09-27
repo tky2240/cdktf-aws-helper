@@ -96,4 +96,21 @@ export const BATCH_COMPUTE_ENVIRONMENT_TEST_SUITE: TestSuite<
     expectedDataAwsSubnet: "subnet-123456",
     expectedError: false,
   },
+  specifyNoSubnet: {
+    inputConfig: {
+      type: "MANAGED",
+      computeResources: {
+        type: "EC2",
+        maxVcpus: 16,
+        minVcpus: 0,
+        desiredVcpus: 8,
+        securityGroupIds: ["sg-123456"],
+        subnets: [],
+      },
+    },
+    inputStackConstructor: (scope, config) => {
+      new BatchComputeEnvironment(scope, constructId, config);
+    },
+    expectedError: true,
+  },
 } as const;

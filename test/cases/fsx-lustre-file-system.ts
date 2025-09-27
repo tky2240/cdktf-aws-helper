@@ -73,4 +73,14 @@ export const FSX_LUSTRE_FILE_SYSTEM_TEST_SUITE: TestSuite<
     expectedDataAwsSubnet: "subnet-123456",
     expectedError: false,
   },
+  specifyNoSubnet: {
+    inputConfig: {
+      subnetIds: [],
+      securityGroupIds: ["sg-123456"],
+    },
+    inputStackConstructor: (scope, config) => {
+      new FsxLustreFileSystem(scope, constructId, config);
+    },
+    expectedError: true,
+  },
 } as const;

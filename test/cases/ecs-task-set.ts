@@ -92,4 +92,20 @@ export const ECS_TASK_SET_TEST_SUITE: TestSuite<typeof EcsTaskSet> = {
     expectedDataAwsSubnet: "subnet-123456",
     expectedError: false,
   },
+  specifyNoSubnet: {
+    inputConfig: {
+      cluster: "arn:aws:ecs:us-east-1:123456789012:cluster/test-cluster",
+      service: "arn:aws:ecs:us-east-1:123456789012:service/test-service",
+      taskDefinition:
+        "arn:aws:ecs:us-east-1:123456789012:task-definition/test-task",
+      networkConfiguration: {
+        securityGroups: ["sg-123456"],
+        subnets: [],
+      },
+    },
+    inputStackConstructor: (scope, config) => {
+      new EcsTaskSet(scope, constructId, config);
+    },
+    expectedError: true,
+  },
 } as const;

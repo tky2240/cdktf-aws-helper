@@ -71,4 +71,15 @@ export const APPRUNNER_VPC_CONNECTOR_TEST_SUITE: TestSuite<
     expectedDataAwsSubnet: "subnet-123456",
     expectedError: false,
   },
+  specifyNoSubnet: {
+    inputConfig: {
+      vpcConnectorName: "test-connector",
+      subnets: [],
+      securityGroups: [],
+    },
+    inputStackConstructor: (scope, config) => {
+      new ApprunnerVpcConnector(scope, constructId, config);
+    },
+    expectedError: true,
+  },
 } as const;

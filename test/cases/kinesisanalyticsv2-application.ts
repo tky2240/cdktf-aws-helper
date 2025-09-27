@@ -119,4 +119,27 @@ export const KINESISANALYTICSV2_APPLICATION_TEST_SUITE: TestSuite<
     expectedDataAwsSubnet: "subnet-123456",
     expectedError: false,
   },
+  specifyNoSubnet: {
+    inputConfig: {
+      name: "test-analytics-app",
+      runtimeEnvironment: "SQL-1_0",
+      serviceExecutionRole: "arn:aws:iam::123456789012:role/analytics_role",
+      applicationConfiguration: {
+        applicationCodeConfiguration: {
+          codeContent: {
+            textContent: "SELECT * FROM source;",
+          },
+          codeContentType: "PLAINTEXT",
+        },
+        vpcConfiguration: {
+          subnetIds: [],
+          securityGroupIds: ["sg-123456"],
+        },
+      },
+    },
+    inputStackConstructor: (scope, config) => {
+      new Kinesisanalyticsv2Application(scope, constructId, config);
+    },
+    expectedError: true,
+  },
 } as const;
